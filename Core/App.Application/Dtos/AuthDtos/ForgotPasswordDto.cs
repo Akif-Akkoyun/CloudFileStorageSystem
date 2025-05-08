@@ -11,9 +11,9 @@ namespace App.Application.Dtos.AuthDtos
     {
         public string Email { get; set; } = string.Empty;
     }
-    public class ForgotPasswordDTOValidator : AbstractValidator<ForgotPasswordDto>
+    public class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordDto>
     {
-        public ForgotPasswordDTOValidator()
+        public ForgotPasswordCommandValidator()
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
         }

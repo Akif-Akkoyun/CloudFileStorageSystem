@@ -1,5 +1,6 @@
 ﻿using App.Application.Dtos.AuthDtos;
 using App.Application.Features.Commads.AuthCommands;
+using Ardalis.Result;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -49,21 +50,53 @@ namespace Authentication.Api.Controllers
             }
             return Ok(new { result.Id, result.Name, result.Email });
         }
-        [HttpGet("/forgot-password")]
-        public IActionResult ForgotPassword()
+        [HttpPost("/forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
         {
-            return Ok("Forgot Password");
-        }       
-        
-        [HttpGet("/refresh-token")]
-        public IActionResult RefreshToken()
-        {
-            return Ok("Refresh Token");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var command = new ForgotPasswordCommand
+            {
+                Email = dto.Email
+            };
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            if (result.Status == ResultStatus.NotFound)
+            {
+                return NotFound(result);
+            }
+            return BadRequest(result);
         }
-        [HttpGet("/logout")]
-        public IActionResult Logout()
+
+        [HttpPost("renew-password")]
+        public async Task<IActionResult> RenewPassword([FromBody] ResetPasswordDto dto)
         {
-            return Ok("Logout");
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            var command = new ResetPasswordCommand
+            {
+                Email = dto.Email,
+                Token = dto.Token,
+                PasswordHash = dto.PasswordHash,
+                PasswordRepeat = dto.PasswordRepeat
+            };
+            var result = await _mediator.Send(command);
+            if (result.IsSuccess)
+            {
+                return Ok(result);
+            }
+            if (result.Status == ResultStatus.NotFound)
+            {
+                return NotFound(result);
+            }
+            return BadRequest(result);
         }
     }
 }

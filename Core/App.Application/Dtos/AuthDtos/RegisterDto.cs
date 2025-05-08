@@ -1,26 +1,30 @@
-﻿using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using App.Application.Features.Commads.AuthCommands;
+using FluentValidation;
 namespace App.Application.Dtos.AuthDtos
 {
     public class RegisterDto
     {
         public string UserName { get; set; } = default!;
+        public string UserSurName { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string PasswordHash { get; set; } = default!;
+        public string PasswordHashRepeat { get; set; } = default!;
         public int RoleId { get; set; }
     }
-    public class RegisterDTOValidator : AbstractValidator<RegisterDto>
+    public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     {
-        public RegisterDTOValidator()
+        public RegisterCommandValidator()
         {
-            RuleFor(x => x.UserName).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.Email).NotEmpty().MaximumLength(50);
-            RuleFor(x => x.PasswordHash).NotEmpty().MaximumLength(255);
+            RuleFor(x => x.RegisterDto.Email)
+                .NotEmpty().WithMessage("Email boş olamaz.")
+                .EmailAddress().WithMessage("Geçersiz email.");
+
+            RuleFor(x => x.RegisterDto.PasswordHash)
+                .NotEmpty().WithMessage("Şifre boş olamaz.");
+
+            RuleFor(x => x.RegisterDto.PasswordHashRepeat)
+                .Equal(x => x.RegisterDto.PasswordHash)
+                .WithMessage("Şifreler eşleşmiyor.");
         }
     }
 }
