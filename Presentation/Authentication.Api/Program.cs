@@ -8,12 +8,13 @@ builder.Services.AddAuthDataLayer(builder.Configuration);
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
 app.UseCors("AllowAllOrigins");
-
+app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-await app.RunAsync();
+app.Run();

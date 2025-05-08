@@ -14,6 +14,7 @@ namespace App.Domain.Entities
         public string Name { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string PasswordHash { get; set; } = default!;
+        public string? RefreshPasswordToken { get; set; }
         public int RoleId { get; set; }
 
         // Navigation
