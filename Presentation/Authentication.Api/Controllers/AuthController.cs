@@ -1,4 +1,5 @@
-﻿using App.Application.Features.Commads.AuthCommands;
+﻿using App.Application.Dtos.AuthDtos;
+using App.Application.Features.Commads.AuthCommands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,10 +35,19 @@ namespace Authentication.Api.Controllers
                 return Unauthorized(ModelState);
             }
         }
-        [HttpGet("/register")]
-        public IActionResult Register()
+        [HttpPost("/register")]
+        public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            return Ok("Register");
+            if (registerDto is null)
+            {
+                return BadRequest("Geçersiz veri");
+            }
+            var result = await _mediator.Send(new RegisterCommand(registerDto));
+            if (result is null)
+            {
+                return BadRequest("Kullanıcı oluşturulamadı");
+            }
+            return Ok(new { result.Id, result.Name, result.Email });
         }
         [HttpGet("/forgot-password")]
         public IActionResult ForgotPassword()

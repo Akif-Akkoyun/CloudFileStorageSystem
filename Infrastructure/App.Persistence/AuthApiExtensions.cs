@@ -19,6 +19,7 @@ namespace App.Persistence
             services.AddMediatR(cfg =>
             {
                 cfg.RegisterServicesFromAssembly(typeof(LoginCommand).Assembly);
+                cfg.RegisterServicesFromAssembly(typeof(RegisterCommand).Assembly);
             });
         }
     }
