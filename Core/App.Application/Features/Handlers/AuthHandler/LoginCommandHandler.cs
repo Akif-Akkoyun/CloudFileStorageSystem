@@ -23,11 +23,11 @@ namespace App.Application.Features.Handlers.AuthHandler
             {
                 throw new UnauthorizedAccessException("Email or password is incorrect");
             }
-            if (user.RoleId != 1)
-            {
-                throw new UnauthorizedAccessException("Unauthorized Access");
-            }
             var token = _authTokenService.GenerateToken(user);
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new UnauthorizedAccessException("Token generation failed");
+            }
             return new AuthTokenDto { Token = token };
         }
     }

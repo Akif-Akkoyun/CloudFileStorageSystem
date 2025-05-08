@@ -12,9 +12,9 @@ namespace App.Application.Dtos.AuthDtos
         public string Email { get; set; } = default!;
         public string PasswordHash { get; set; } = default!;
     }
-    public class LoginDTOValidator : AbstractValidator<LoginDto>
+    public class LoginCommandValidator : AbstractValidator<LoginDto>
     {
-        public LoginDTOValidator()
+        public LoginCommandValidator()
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
             RuleFor(x => x.PasswordHash).NotEmpty().MinimumLength(6);

@@ -1,7 +1,6 @@
 ﻿using App.Persistence;
 using Duende.IdentityModel;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 

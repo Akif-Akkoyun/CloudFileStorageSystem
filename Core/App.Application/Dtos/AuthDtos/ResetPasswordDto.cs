@@ -14,9 +14,9 @@ namespace App.Application.Dtos.AuthDtos
         public string PasswordHash { get; set; } = null!;
         public string PasswordRepeat { get; set; } = null!;
     }
-    public class ResetPasswordDTOValidator : AbstractValidator<ResetPasswordDto>
+    public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordDto>
     {
-        public ResetPasswordDTOValidator()
+        public ResetPasswordCommandValidator()
         {
             RuleFor(x => x.Email).NotEmpty().EmailAddress();
             RuleFor(x => x.Token).NotEmpty();
