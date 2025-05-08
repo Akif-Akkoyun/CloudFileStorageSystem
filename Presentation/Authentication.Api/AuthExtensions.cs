@@ -37,15 +37,11 @@ namespace Authentication.Api
                 {
                     ValidateIssuer = true,
                     ValidIssuer = configuration["JWT:Issuer"],
-
-                    ValidateAudience = false, // İsteğe göre true yapılabilir
-
+                    ValidateAudience = false,
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
-
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!)),
-
                     NameClaimType = JwtClaimTypes.Name,
                     RoleClaimType = JwtClaimTypes.Role
                 };
