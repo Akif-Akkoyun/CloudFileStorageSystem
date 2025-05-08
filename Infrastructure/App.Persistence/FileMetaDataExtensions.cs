@@ -8,7 +8,7 @@ namespace App.Persistence
     {
         public static void AddFileMetaDataApi(this IServiceCollection services, string connectionString)
         {
-            services.AddDbContext<DbContext, FileMetaDataDbContext>(options =>
+            services.AddDbContext<FileMetaDataDbContext>(options =>
                 options.UseNpgsql(connectionString));
         }
     }

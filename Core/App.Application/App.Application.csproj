@@ -9,8 +9,16 @@
   <ItemGroup>
     <Folder Include="Features\Queries\" />
     <Folder Include="Features\Results\" />
-    <Folder Include="Features\Handlers\" />
-    <Folder Include="Features\Commads\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+    <PackageReference Include="FluentValidation" Version="12.0.0" />
+    <PackageReference Include="MediatR" Version="12.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\App.Domain\App.Domain.csproj" />
   </ItemGroup>
 
 </Project>
