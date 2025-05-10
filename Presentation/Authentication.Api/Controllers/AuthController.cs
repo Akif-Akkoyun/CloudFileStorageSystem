@@ -1,5 +1,5 @@
 ﻿using App.Application.Dtos.AuthDtos;
-using App.Application.Features.Commads.AuthCommands;
+using App.Application.Features.Auth.Commands;
 using Ardalis.Result;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

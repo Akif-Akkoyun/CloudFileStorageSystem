@@ -21,7 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Core\App.Application\App.Application.csproj" />
+    <ProjectReference Include="..\..\Core\App.Application.Auth\App.Application.Auth.csproj" />
+    <ProjectReference Include="..\..\Core\App.Application.File\App.Application.File.csproj" />
     <ProjectReference Include="..\..\Core\App.Domain\App.Domain.csproj" />
   </ItemGroup>
 

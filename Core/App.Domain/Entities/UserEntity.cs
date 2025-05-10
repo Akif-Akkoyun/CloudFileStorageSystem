@@ -17,8 +17,6 @@ namespace App.Domain.Entities
         public string PasswordHash { get; set; } = default!;
         public string? RefreshPasswordToken { get; set; }
         public int RoleId { get; set; }
-
-        // Navigation
         public RoleEntity Role { get; set; } = default!;
     }
     public class UserConfiguration : IEntityTypeConfiguration<UserEntity>
