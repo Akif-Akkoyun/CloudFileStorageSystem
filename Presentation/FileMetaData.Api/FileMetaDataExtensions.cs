@@ -1,4 +1,9 @@
-﻿using App.Persistence;
+﻿using App.Application.Dtos.FileDtos;
+using App.Application.Features.Auth.Handlers;
+using App.Application.Interfaces.File;
+using App.Persistence;
+using App.Persistence.File.Repositories;
+using FluentValidation;
 
 namespace FileMetaData.Api
 {

@@ -1,5 +1,12 @@
-﻿using App.Persistence;
+﻿using App.Application.Dtos.AuthDtos;
+using App.Application.Features.File.Handlers;
+using App.Application.Interfaces.Auth;
+using App.Persistence.Auth;
+using App.Persistence.Auth.Repositories;
+using App.Persistence.Auth.Services.AuthServices;
+using App.Persistence.Auth.Services.MailServices;
 using Duende.IdentityModel;
+using FluentValidation;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -24,7 +31,7 @@ namespace Authentication.Api
             if (string.IsNullOrEmpty(connectionString))
                 throw new InvalidOperationException("Connection string is not set in appsettings.json");
             services.AddAuthApi(connectionString);
-
+            
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

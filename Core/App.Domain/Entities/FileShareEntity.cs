@@ -14,6 +14,7 @@ namespace App.Domain.Entities
         public int FileId { get; set; }
         public int UserId { get; set; }
         public string Permission { get; set; } = default!;
+        public FileEntity File { get; set; } = default!;
     }
     public class FileShareConfiguration : IEntityTypeConfiguration<FileShareEntity>
     {
