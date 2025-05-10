@@ -10,7 +10,6 @@ namespace App.Domain.Entities
 {
     public class FileShareEntity
     {
-        public int Id { get; set; }
         public int FileId { get; set; }
         public int UserId { get; set; }
         public string Permission { get; set; } = default!;
@@ -25,6 +24,11 @@ namespace App.Domain.Entities
             builder.Property(fs => fs.Permission)
                 .IsRequired()
                 .HasMaxLength(50);
+
+            builder.HasOne(fs => fs.File)
+                .WithMany(f => f.FileShares)
+                .HasForeignKey(fs => fs.FileId)
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
