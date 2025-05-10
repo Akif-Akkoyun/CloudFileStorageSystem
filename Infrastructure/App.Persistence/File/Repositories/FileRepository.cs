@@ -34,6 +34,7 @@ namespace App.Persistence.File.Repositories
         public async Task<List<FileEntity>> GetAllAsync(int ownerId)
         {
             return await _fileMetaDataDb.Files
+                .Include(f => f.FileShares)
                 .Where(f => f.OwnerId == ownerId)
                 .ToListAsync();
         }
@@ -50,6 +51,7 @@ namespace App.Persistence.File.Repositories
         public async Task<List<FileEntity>> GetByFilterAsync(Expression<Func<FileEntity, bool>> person)
         {
             return await _fileMetaDataDb.Files
+                .Include(f => f.FileShares)
                 .Where(person)
                 .ToListAsync();
         }

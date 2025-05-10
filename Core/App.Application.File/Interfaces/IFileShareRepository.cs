@@ -12,6 +12,5 @@ namespace App.Application.Interfaces.File
         Task CreateAsync(FileShareEntity entity);
         Task DeleteByFileIdAsync(int fileId);
         Task<List<FileEntity>> GetFilesSharedWithUserAsync(int userId);
-        Task<List<FileShareEntity>> GetUsersWithFileSharedAsync(int fileId);
     }
 }

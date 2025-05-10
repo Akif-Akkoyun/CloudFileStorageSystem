@@ -45,11 +45,5 @@ namespace App.Persistence.File.Repositories
                 .Select(fs => fs.File)
                 .ToListAsync();
         }
-        public async Task<List<FileShareEntity>> GetUsersWithFileSharedAsync(int fileId)
-        {
-            return await _context.FileShares
-                .Where(fs => fs.FileId == fileId)
-                .ToListAsync();
-        }
     }
 }

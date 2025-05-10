@@ -64,12 +64,6 @@ namespace FileMetaData.Api.Controllers
         {
             var result = await _mediator.Send(new GetSharedWithMeQuery(id));
             return Ok(result);
-        }
-        [HttpGet("/get-users-with-file-shared")]
-        public async Task<IActionResult> GetUsersWithFileShared([FromQuery] int id)
-        {
-            var result = await _mediator.Send(new GetUsersWithFileSharedQuery(id));
-            return Ok(result);
-        }
+        }        
     }
 }
