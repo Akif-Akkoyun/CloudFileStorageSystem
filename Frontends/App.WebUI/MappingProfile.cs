@@ -1,4 +1,6 @@
-﻿using AutoMapper;
+﻿using App.Dto.FileDtos;
+using App.WebUI.Models;
+using AutoMapper;
 
 namespace App.WebUI
 {
@@ -14,6 +16,11 @@ namespace App.WebUI
                 .ReverseMap();
             CreateMap<Models.RenewPasswordViewModel, Dto.AuthDtos.ResetPasswordDto>()
                 .ReverseMap();
+            CreateMap<FileUploadViewModel,Dto.FileDtos.FileMetaDataDto>()
+                .ForMember(dest => dest.Name, opt => opt.Ignore())
+                .ForMember(dest => dest.FilePath, opt => opt.Ignore()) 
+                .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
+                .ForMember(dest => dest.UploadDate, opt => opt.Ignore());
         }
     }
 }
