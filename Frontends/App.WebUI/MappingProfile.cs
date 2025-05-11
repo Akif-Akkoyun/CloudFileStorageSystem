@@ -16,11 +16,14 @@ namespace App.WebUI
                 .ReverseMap();
             CreateMap<Models.RenewPasswordViewModel, Dto.AuthDtos.ResetPasswordDto>()
                 .ReverseMap();
-            CreateMap<FileUploadViewModel,Dto.FileDtos.FileMetaDataDto>()
-                .ForMember(dest => dest.Name, opt => opt.Ignore())
-                .ForMember(dest => dest.FilePath, opt => opt.Ignore()) 
+            CreateMap<FileUploadViewModel, FileMetaDataDto>()
+                .ForMember(dest => dest.FileName, opt => opt.Ignore())
+                .ForMember(dest => dest.FilePath, opt => opt.Ignore())
+                .ForMember(dest => dest.Description, opt => opt.Ignore())
                 .ForMember(dest => dest.OwnerId, opt => opt.Ignore())
                 .ForMember(dest => dest.UploadDate, opt => opt.Ignore());
+            CreateMap<FileDetailViewModel, Dto.FileDtos.FileDetailDto>()
+                .ReverseMap();
         }
     }
 }

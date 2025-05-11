@@ -10,8 +10,9 @@ namespace App.Application.File.Features.File.Results
     public class GetPublicFilesQueryResult
     {
         public int Id { get; set; }
-        public string Name { get; set; } = default!;
+        public string FileName { get; set; } = default!;
         public string Description { get; set; } = default!;
+        public string FilePath { get; set; } = default!;
         public FileVisibility Visibility { get; set; }
         public DateTime UploadDate { get; set; }
         public int OwnerId { get; set; }

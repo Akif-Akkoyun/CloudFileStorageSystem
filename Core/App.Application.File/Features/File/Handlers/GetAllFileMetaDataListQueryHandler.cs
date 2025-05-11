@@ -18,10 +18,11 @@ namespace App.Application.Features.File.Handlers
             return files.Select(f => new GetAllFileMetaDataListQueryResult
             {
                 Id = f.Id,
-                Name = f.Name,
+                FileName = f.FileName,
                 Description = f.Description,
                 UploadDate = f.UploadDate,
-                Visibility = f.Visibility
+                Visibility = f.Visibility,
+                FilePath = f.FilePath
             }).ToList();
         }
     }

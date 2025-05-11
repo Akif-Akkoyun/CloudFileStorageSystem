@@ -29,11 +29,12 @@ namespace App.Application.Features.File.Handlers
             return new GetFileMetaDataByIdQueryResult
             {
                 Id = file.Id,
-                Name = file.Name,
+                FileName = file.FileName,
                 Description = file.Description,
                 Visibility = file.Visibility,
                 UploadDate = file.UploadDate,
-                OwnerId = file.OwnerId
+                OwnerId = file.OwnerId,
+                FilePath = file.FilePath
             };
         }
     }

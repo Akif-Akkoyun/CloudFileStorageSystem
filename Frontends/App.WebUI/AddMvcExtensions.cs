@@ -27,6 +27,7 @@ namespace App.WebUI
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
+                    
                     {
                         var token = context.Request.Cookies["auth-token"];
                         if (!string.IsNullOrEmpty(token))

@@ -1,0 +1,77 @@
+﻿@model FileDetailViewModel
+@{
+    ViewData["Title"] = "Dosya Detayları";
+}
+
+<section class="ftco-section ftco-no-pb" id="resume-section">
+    <div class="container">
+        <div class="row justify-content-center pb-5">
+            <div class="page-content">
+                <div class="container-fluid">
+                    <div class="row justify-content-center">
+                        <div class="col-xl-10">
+                            <div class="card">
+                                <div class="card-body text-center">
+
+                                    @{
+                                        bool isImage = !string.IsNullOrEmpty(Model?.FilePath) &&
+                                        (Model.FilePath.ToLower().EndsWith(".jpg") ||
+                                        Model.FilePath.ToLower().EndsWith(".jpeg") ||
+                                        Model.FilePath.ToLower().EndsWith(".png") ||
+                                        Model.FilePath.ToLower().EndsWith(".webp") ||
+                                        Model.FilePath.ToLower().EndsWith(".gif"));
+                                    }
+                                    @if (isImage)
+                                    {
+                                        <img src="@Model.FilePath"
+                                         alt="@Model.FileName"
+                                         class="img-fluid mb-4"
+                                         style="max-height: 400px; border-radius: 10px;" />
+                                    <h4 class="card-title mt-3">@Model.FileName</h4>
+                                    } 
+                                    
+                                    <p class="card-subtitle mb-4 text-muted">Dosya Detayları</p>
+
+                                    <div class="table-responsive mt-4">
+                                        <table class="table table-bordered">
+                                            <tbody>
+                                                <tr>
+                                                    <th style="width: 30%;">Açıklama</th>
+                                                    <td>@Model.Description</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Yüklenme Tarihi</th>
+                                                    <td>@Model.UploadDate.ToString("dd.MM.yyyy HH:mm")</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Görünürlük</th>
+                                                    <td>@Model.Visibility</td>
+                                                </tr>
+                                                <tr>
+                                                    <th>Dosya Adı</th>
+                                                    <td>
+                                                        <a href="@Model.FilePath" target="_blank">@Model.FilePath.Split("/").Last()</a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-controller="File"sp-action="Download"asp-route-id="@Model.Id"class="btn btn-success mt-3">Dosyayı İndir</a>
+                                    }
+                                    else
+                                    {
+                                        <div class="alert alert-warning mt-3">
+                                            İndirme işlemi için giriş yapmalısınız.
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

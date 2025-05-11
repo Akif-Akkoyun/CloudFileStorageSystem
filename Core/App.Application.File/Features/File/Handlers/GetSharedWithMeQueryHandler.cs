@@ -25,10 +25,11 @@ namespace App.Application.File.Features.File.Handlers
             return result.Select(x => new GetSharedWithMeQueryResult
             {
                 Id = x.Id,
-                Name = x.Name,
+                FileName = x.FileName,
                 Description = x.Description,
                 Visibility = x.Visibility,
-                UploadDate = x.UploadDate
+                UploadDate = x.UploadDate,
+                FilePath = x.FilePath,
             }).ToList();
         }
     }

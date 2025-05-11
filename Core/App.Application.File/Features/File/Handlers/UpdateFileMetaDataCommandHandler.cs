@@ -21,9 +21,11 @@ namespace App.Application.Features.File.Handlers
             var existing = await _fileRepository.GetByIdAsync(dto.Id, includeShares: true);
             if (existing == null)
                 return false;
-            existing.Name = dto.Name;
+            existing.FileName = dto.FileName;
             existing.Description = dto.Description;
             existing.Visibility = dto.Visibility;
+            existing.UploadDate = DateTime.UtcNow;
+            existing.FilePath = dto.FilePath;
 
             await _fileRepository.UpdateAsync(existing);
 

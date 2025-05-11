@@ -25,10 +25,11 @@ namespace App.Application.File.Features.File.Handlers
             return files.Select(f => new GetPublicFilesQueryResult
             {
                 Id = f.Id,
-                Name = f.Name,
+                FileName = f.FileName,
                 Description = f.Description,
                 Visibility = f.Visibility,
-                UploadDate = f.UploadDate
+                UploadDate = f.UploadDate,
+                FilePath = f.FilePath,
             }).ToList();
         }
     }
