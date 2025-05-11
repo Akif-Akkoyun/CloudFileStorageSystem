@@ -7,8 +7,9 @@ namespace App.Domain.Entities
     public class FileEntity
     {
         public int Id { get; set; }
-        public string Name { get; set; } = default!;
+        public string FileName { get; set; } = default!;
         public string Description { get; set; } = default!;
+        public string FilePath { get; set; } = default!;
         public int OwnerId { get; set; }
         public DateTime UploadDate { get; set; }
         public FileVisibility Visibility { get; set; } = FileVisibility.Private;
@@ -19,7 +20,7 @@ namespace App.Domain.Entities
         public void Configure(EntityTypeBuilder<FileEntity> builder)
         {
             builder.HasKey(f => f.Id);
-            builder.Property(f => f.Name)
+            builder.Property(f => f.FileName)
                 .IsRequired()
                 .HasMaxLength(200);
             builder.Property(f => f.Description)
@@ -33,6 +34,9 @@ namespace App.Domain.Entities
                 .WithOne()
                 .HasForeignKey(fs => fs.FileId)
                 .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(f => f.FilePath)
+                .IsRequired()
+                .HasMaxLength(500);
         }
     }
 }

@@ -25,13 +25,12 @@ namespace FileMetaData.Api.Controllers
             var result = await _mediator.Send(new GetAllFileMetaDataListQuery(ownerId));
             return Ok(result);
         }
-        [HttpGet("/get-by-/{id}")]
+        [HttpGet("get-by/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetFileMetaDataByIdQuery(id));
             if (result == null)
                 return NotFound();
-
             return Ok(result);
         }
         [HttpPost("create")]
@@ -64,6 +63,6 @@ namespace FileMetaData.Api.Controllers
         {
             var result = await _mediator.Send(new GetSharedWithMeQuery(id));
             return Ok(result);
-        }        
+        }
     }
 }

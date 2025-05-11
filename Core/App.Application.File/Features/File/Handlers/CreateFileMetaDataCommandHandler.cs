@@ -23,11 +23,12 @@ namespace App.Application.Features.File.Handlers
 
             var file = new FileEntity
             {
-                Name = dto.Name,
+                FileName = dto.FileName,
                 Description = dto.Description,
                 OwnerId = dto.OwnerId,
                 UploadDate = DateTime.UtcNow,
-                Visibility = dto.Visibility
+                Visibility = dto.Visibility,
+                FilePath = dto.FilePath,
             };
 
             var fileId = await _fileRepository.CreateAsync(file);

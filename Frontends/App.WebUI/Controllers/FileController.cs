@@ -3,6 +3,7 @@ using App.WebUI.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Security.Claims;
 
@@ -27,11 +28,11 @@ namespace App.WebUI.Controllers
         public async Task<IActionResult> Upload([FromForm] FileUploadViewModel viewModel)
         {
             if (!ModelState.IsValid)
+            {
                 return View(viewModel);
-
+            }
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId == null) return Unauthorized();
-            // 1. Dosya fiziksel olarak kaydedilsin
             var client = _httpClientFactory.CreateClient("GatewayAPI");
             var token = Request.Cookies["auth-token"];
             if (!string.IsNullOrWhiteSpace(token))
@@ -39,7 +40,7 @@ namespace App.WebUI.Controllers
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
             Console.WriteLine("Token -> " + token);
-            
+
             using var content = new MultipartFormDataContent();
             content.Add(new StreamContent(viewModel.File.OpenReadStream()), "file", viewModel.File.FileName);
 
@@ -48,22 +49,80 @@ namespace App.WebUI.Controllers
             {
                 TempData["Error"] = "Dosya yüklenemedi. Lütfen tekrar deneyin.";
                 return RedirectToAction("Upload");
-            }               
-
-            var filePath = await uploadResponse.Content.ReadAsStringAsync();
-
+            }
+            var uploadResult = await uploadResponse.Content.ReadFromJsonAsync<FileUploadResponseDto>();
+            var filePath = uploadResult?.FilePath;
             var dto = _mapper.Map<FileMetaDataDto>(viewModel);
-            dto.Name = viewModel.File.FileName;
+            dto.FileName = viewModel.File.FileName;
+            dto.Description = viewModel.Description;
             dto.FilePath = filePath;
             dto.OwnerId = int.Parse(userId);
             dto.UploadDate = DateTime.UtcNow;
-
+            dto.Visibility = (Dto.FileDtos.Visibility)viewModel.Visibility;
             var metaResponse = await client.PostAsJsonAsync("/api/files/create", dto);
             if (!metaResponse.IsSuccessStatusCode)
+            {
                 return View("Error");
-
+            }
             TempData["Success"] = "Dosya başarıyla yüklendi.";
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", "Home");
+        }
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Details([FromRoute] int id)
+        {
+            var client = _httpClientFactory.CreateClient("GatewayAPI");
+            var token = Request.Cookies["auth-token"];
+            if (!string.IsNullOrEmpty(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+            var response = await client.GetAsync($"/api/files/get-by/{id}");
+            if (response.StatusCode == HttpStatusCode.Forbidden)
+            {
+                TempData["Error"] = "Bu dosyanın detaylarını görmeye yetkiniz yok.";
+                return RedirectToAction("Index", "Home");
+            }
+            if (!response.IsSuccessStatusCode)
+            {
+                return View("Error");
+            }
+            var dto = await response.Content.ReadFromJsonAsync<FileDetailDto>();
+            if (dto == null)
+            {
+                TempData["Error"] = "Dosya bulunamadı.";
+                return RedirectToAction("Index", "Home");
+            }
+            var viewModel = _mapper.Map<FileDetailViewModel>(dto);
+            return View(viewModel);
+        }
+        [Authorize(Roles = "User")]
+        [HttpGet]
+        public async Task<IActionResult> Download([FromRoute]int id)
+        {
+            var client = _httpClientFactory.CreateClient("GatewayAPI");
+            var token = Request.Cookies["auth-token"];
+            if (!string.IsNullOrEmpty(token))
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var metaResponse = await client.GetAsync($"/api/files/get-by/{id}");
+            if (!metaResponse.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var fileMeta = await metaResponse.Content.ReadFromJsonAsync<FileDetailDto>();
+            if (fileMeta == null || string.IsNullOrEmpty(fileMeta.FilePath))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var fileName = Path.GetFileName(fileMeta.FilePath);
+            var fileResponse = await client.GetAsync($"/api/storages/download/{fileName}");
+            if (!fileResponse.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var fileBytes = await fileResponse.Content.ReadAsByteArrayAsync();
+            var contentType = fileResponse.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
+            return File(fileBytes, contentType, fileName);
         }
     }
 }

@@ -20,20 +20,29 @@ namespace FileStorage.Api.Controllers
         {
             if (file == null || file.Length == 0)
                 return BadRequest("Dosya bulunamadı.");
-
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var originalFileName = file.FileName.Replace(" ", "_").Replace(")", "").Replace("(", "").ToLower();
+            var fileExtension = Path.GetExtension(originalFileName);
+            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(originalFileName);
+            var fileName = originalFileName;
             var fullPath = Path.Combine(_storagePath, fileName);
-
+            int count = 1;
+            while (System.IO.File.Exists(fullPath))
+            {
+                fileName = $"{fileNameWithoutExtension}-{count}{fileExtension}";
+                fullPath = Path.Combine(_storagePath, fileName);
+                count++;
+            }
             using (var stream = new FileStream(fullPath, FileMode.Create))
             {
                 await file.CopyToAsync(stream);
             }
+            var baseUrl = $"{Request.Scheme}://{Request.Host}";
+            var filePath = $"{baseUrl}/uploads/{fileName}";
 
-            return Ok(new { FileName = fileName, FilePath = $"uploads/{fileName}" });
+            return Ok(new { filePath });
         }
-
-        [HttpGet("download")]
-        public async Task<IActionResult> Download([FromQuery] string fileName)
+        [HttpGet("download/{fileName}")]
+        public async Task<IActionResult> Download(string fileName)
         {
             var fullPath = Path.Combine(_storagePath, fileName);
             if (!System.IO.File.Exists(fullPath))
