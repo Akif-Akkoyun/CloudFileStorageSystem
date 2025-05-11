@@ -8,7 +8,6 @@ namespace App.Application.Dtos.AuthDtos
         public string UserSurName { get; set; } = default!;
         public string Email { get; set; } = default!;
         public string PasswordHash { get; set; } = default!;
-        public string PasswordHashRepeat { get; set; } = default!;
         public int RoleId { get; set; }
     }
     public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
@@ -21,10 +20,6 @@ namespace App.Application.Dtos.AuthDtos
 
             RuleFor(x => x.RegisterDto.PasswordHash)
                 .NotEmpty().WithMessage("Şifre boş olamaz.");
-
-            RuleFor(x => x.RegisterDto.PasswordHashRepeat)
-                .Equal(x => x.RegisterDto.PasswordHash)
-                .WithMessage("Şifreler eşleşmiyor.");
         }
     }
 }

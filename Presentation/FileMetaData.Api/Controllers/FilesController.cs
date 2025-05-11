@@ -25,7 +25,7 @@ namespace FileMetaData.Api.Controllers
             var result = await _mediator.Send(new GetAllFileMetaDataListQuery(ownerId));
             return Ok(result);
         }
-        [HttpGet("{id}")]
+        [HttpGet("/get-by-/{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _mediator.Send(new GetFileMetaDataByIdQuery(id));
@@ -34,7 +34,7 @@ namespace FileMetaData.Api.Controllers
 
             return Ok(result);
         }
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> Create([FromBody] FileCreateDto dto)
         {
             var fileId = await _mediator.Send(new CreateFileMetaDataCommand(dto));
@@ -47,13 +47,13 @@ namespace FileMetaData.Api.Controllers
             var result = await _mediator.Send(new UpdateFileMetaDataCommand(dto));
             return result ? Ok("File updated.") : NotFound("File not found.");
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("remove/{id}")]
         public async Task<IActionResult> Remove(int id)
         {
             var result = await _mediator.Send(new RemoveFileMetaDataCommand(id));
             return result ? Ok("File deleted.") : NotFound("File not found.");
         }
-        [HttpGet("/filters/public")]
+        [HttpGet("filters/public")]
         public async Task<IActionResult> FilePublicFilter()
         {
             var result = await _mediator.Send(new GetPublicFilesQuery());
