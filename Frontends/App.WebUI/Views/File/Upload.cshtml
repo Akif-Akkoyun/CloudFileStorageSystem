@@ -1,0 +1,49 @@
+﻿@model FileUploadViewModel
+
+@{
+    ViewData["Title"] = "Dosya Yükle";
+}
+
+<h2>Dosya Yükle</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["Success"]
+    </div>
+}
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["Error"]
+    </div>
+}
+
+<form asp-action="Upload" asp-controller="File" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Visibility"></label>
+        <select asp-for="Visibility" class="form-control" asp-items="Html.GetEnumSelectList<Visibility>()">
+            <option value="">-- Seçiniz --</option>
+        </select>
+        <span asp-validation-for="Visibility" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="File">Dosya Seç</label>
+        <input asp-for="File" type="file" class="form-control-file" />
+        <span asp-validation-for="File" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Yükle</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
