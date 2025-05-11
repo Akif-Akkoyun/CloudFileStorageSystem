@@ -15,7 +15,7 @@ namespace FileStorage.Api.Controllers
                 Directory.CreateDirectory(_storagePath);
         }
 
-        [HttpPost("/upload")]
+        [HttpPost("upload")]
         public async Task<IActionResult> Upload(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -32,7 +32,7 @@ namespace FileStorage.Api.Controllers
             return Ok(new { FileName = fileName, FilePath = $"uploads/{fileName}" });
         }
 
-        [HttpGet("/download")]
+        [HttpGet("download")]
         public async Task<IActionResult> Download([FromQuery] string fileName)
         {
             var fullPath = Path.Combine(_storagePath, fileName);

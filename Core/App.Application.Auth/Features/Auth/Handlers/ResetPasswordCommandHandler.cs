@@ -1,14 +1,7 @@
 ﻿using App.Application.Features.Auth.Commands;
 using App.Application.Interfaces.Auth;
-using App.Domain.Entities;
 using Ardalis.Result;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace App.Application.Features.Auth.Handlers
 {
     public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, Result>
@@ -29,11 +22,12 @@ namespace App.Application.Features.Auth.Handlers
             var user = await _userRepository
                 .GetByFilterAsync(x =>
                 x.RefreshPasswordToken == request.Token && x.Email == request.Email);
-            if (user == null)
+            if (user is null)
             {
                 return Result.NotFound();
             }
-            user.PasswordHash = request.PasswordHash;
+            var cryptoPass = BCrypt.Net.BCrypt.HashPassword(request.PasswordHash);
+            user.PasswordHash = cryptoPass;
             user.RefreshPasswordToken = null;
             await _userRepository.UpdateAsync(user);
             return Result.Success();

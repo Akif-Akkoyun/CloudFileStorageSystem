@@ -15,7 +15,7 @@ namespace Authentication.Api.Controllers
         {
             _mediator = mediator;
         }
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginCommand command)
         {
             try
@@ -36,7 +36,7 @@ namespace Authentication.Api.Controllers
                 return Unauthorized(ModelState);
             }
         }
-        [HttpPost("/register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto registerDto)
         {
             if (registerDto is null)
@@ -50,7 +50,7 @@ namespace Authentication.Api.Controllers
             }
             return Ok(new { result.Id, result.Name, result.Email });
         }
-        [HttpPost("/forgot-password")]
+        [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDto dto)
         {
             if (!ModelState.IsValid)
@@ -97,6 +97,12 @@ namespace Authentication.Api.Controllers
                 return NotFound(result);
             }
             return BadRequest(result);
+        }
+        [HttpGet("logout")]
+        public IActionResult Logout()
+        {
+            Response.Cookies.Delete("access_token");
+            return Ok(new { message = "Çıkış yapıldı" });
         }
     }
 }

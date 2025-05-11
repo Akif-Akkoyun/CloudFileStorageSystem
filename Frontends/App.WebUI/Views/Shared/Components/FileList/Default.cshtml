@@ -1,0 +1,70 @@
+﻿@model List<FileListViewModel>
+
+@{
+    ViewData["Title"] = "File List";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="text-center">Book List</h2>
+            <a id="addbutton" class="btn btn-primary" asp-controller="Book" asp-action="CreateBook">Add</a>
+            <table class="table table-bordered table-hover">
+                <thead>
+                    <tr>
+                        <th>
+                            ID
+                        </th>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            UploadDate
+                        </th>
+                        <th>
+                            Visibility
+                        </th>
+                        <th>
+                            View Details
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.Id
+                            </td>
+                            <td>
+                                @item.Name
+                            </td>
+                            <td>
+                                @item.Description
+                            </td>
+                            <td>
+                                @item.UploadDate.ToShortDateString()
+                            </td>
+                            <td>
+                                @item.Visibility
+                            </td>
+                            <td>
+                                <a class="btn btn-info" asp-controller="Book" asp-action="Details" asp-route-id="@item.Id">View</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<style>
+    #addbutton {
+        position: relative;
+        bottom: 10px;
+        left: 80%;
+    }
+</style>
