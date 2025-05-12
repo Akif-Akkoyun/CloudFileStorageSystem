@@ -59,7 +59,7 @@ namespace FileMetaData.Api.Controllers
             var result = await _mediator.Send(new GetPublicFilesQuery());
             return Ok(result);
         }
-        [HttpGet("/shared-with-me")]
+        [HttpGet("shared-with-me/({id})")]
         public async Task<IActionResult> GetSharedWithMe([FromQuery] int id)
         {
             var result = await _mediator.Send(new GetSharedWithMeQuery(id));

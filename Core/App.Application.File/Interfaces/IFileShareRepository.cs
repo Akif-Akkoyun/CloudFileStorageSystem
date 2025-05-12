@@ -1,9 +1,5 @@
-﻿using App.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using App.Application.File.Dtos;
+using App.Domain.Entities;
 
 namespace App.Application.Interfaces.File
 {
@@ -13,5 +9,6 @@ namespace App.Application.Interfaces.File
         Task DeleteByFileIdAsync(int fileId);
         Task<List<FileEntity>> GetFilesSharedWithUserAsync(int userId);
         Task CreateRangeAsync(IEnumerable<FileShareEntity> entities);
+        Task<List<SharedWithMeDto>> GetSharedWithMeAsync(int userId);
     }
 }

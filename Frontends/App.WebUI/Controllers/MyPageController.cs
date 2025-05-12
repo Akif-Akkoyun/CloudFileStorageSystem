@@ -7,6 +7,7 @@ using System.Security.Claims;
 using App.Dto.FileDtos;
 using AutoMapper;
 using System.Text.Json;
+using App.Dto.AuthDtos;
 
 namespace App.WebUI.Controllers
 {
@@ -153,6 +154,51 @@ namespace App.WebUI.Controllers
 
             TempData["Success"] = "Dosya başarıyla güncellendi.";
             return RedirectToAction("MyFiles");
+        }
+        [Authorize(Roles = "User")]
+        [HttpGet]
+        public async Task<IActionResult> SharedWithMe()
+        {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (!int.TryParse(userIdClaim, out var userId))
+            {
+                return Unauthorized();
+            }
+
+            var client = _httpClientFactory.CreateClient("GatewayAPI");
+            var token = Request.Cookies["auth-token"];
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            var response = await client.GetAsync($"/api/files/shared-with-me/{userId}");
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Error"] = "Paylaşılan dosyalar alınamadı.";
+                return View(new List<SharedWithMeViewModel>());
+            }
+
+            var dtoList = await response.Content.ReadFromJsonAsync<List<SharedWithMeDto>>() ?? new();
+            var viewModelList = _mapper.Map<List<SharedWithMeViewModel>>(dtoList);
+
+            foreach (var file in viewModelList)
+            {
+                var userResponse = await client.GetAsync($"/api/auth/users/{file.OwnerId}");
+                if (userResponse.IsSuccessStatusCode)
+                {
+                    var owner = await userResponse.Content.ReadFromJsonAsync<AuthUserDto>();
+                    file.OwnerName = owner?.UserName ?? "Bilinmiyor";
+                }
+                else
+                {
+                    file.OwnerName = "Bilinmiyor";
+                }
+            }
+
+            return View(viewModelList);
         }
 
     }

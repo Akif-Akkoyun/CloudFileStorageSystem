@@ -1,4 +1,5 @@
-﻿using App.Application.File.Features.File.Results;
+﻿using App.Application.File.Dtos;
+using App.Application.File.Features.File.Results;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace App.Application.File.Features.File.Queries
 {
-    public class GetSharedWithMeQuery :IRequest<List<GetSharedWithMeQueryResult>>
+    public class GetSharedWithMeQuery :IRequest<List<SharedWithMeDto>>
     {
         public int Id { get; set; }
 
