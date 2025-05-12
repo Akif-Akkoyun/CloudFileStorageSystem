@@ -14,9 +14,9 @@ using App.Dto.Enums;
 
 namespace App.WebUI.Controllers
 {
+    [Authorize(Roles = "User")]
     public class MyPageController(IHttpClientFactory _httpClientFactory,IMapper _mapper) : Controller
     {
-        [Authorize(Roles = "User")]
         public async Task<IActionResult> MyFiles()
         {
             var client = _httpClientFactory.CreateClient("GatewayAPI");
@@ -35,7 +35,6 @@ namespace App.WebUI.Controllers
             var files = await response.Content.ReadFromJsonAsync<List<MyPageListViewModel>>();
             return View(files);
         }
-        [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
@@ -59,7 +58,6 @@ namespace App.WebUI.Controllers
 
             return RedirectToAction("MyFiles");
         }
-        [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<IActionResult> ToggleVisibility(int id)
         {
@@ -83,7 +81,6 @@ namespace App.WebUI.Controllers
 
             return RedirectToAction("MyFiles");
         }
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> Update(int id)
         {
@@ -113,7 +110,6 @@ namespace App.WebUI.Controllers
             var viewModel = _mapper.Map<FileUpdateViewModel>(dto);
             return View(viewModel);
         }
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Update(FileUpdateViewModel model)
         {

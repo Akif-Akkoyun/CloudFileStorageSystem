@@ -29,9 +29,9 @@
                                     <td>@item.Visibility</td>
                                     <td>@string.Join(", ", item.SharedWithUserNames)</td>
                                     <td>
-                                        <a href="javascript:void(0);" class="btn btn-sm btn-info" data-id="@item.Id" onclick="loadFileDetail(this)">Detay</a>
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-warning" data-id="@item.Id" onclick="loadFileDetail(this)">Detay</a>
 
-                                        <a asp-controller="File" asp-action="Download" asp-route-id="@item.Id" class="btn btn-success btn-sm">İndir</a>
+                                        <a asp-controller="File" asp-action="Download" asp-route-id="@item.Id" class="btn btn-danger btn-sm">İndir</a>
                                     </td>
                                 </tr>
                             }

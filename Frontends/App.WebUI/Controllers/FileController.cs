@@ -9,6 +9,7 @@ using System.Security.Claims;
 
 namespace App.WebUI.Controllers
 {
+    [Authorize(Roles = "User")]
     public class FileController : Controller
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -17,8 +18,7 @@ namespace App.WebUI.Controllers
         {
             _httpClientFactory = httpClientFactory;
             _mapper = mapper;
-        }
-        [Authorize(Roles ="User")]
+        }        
         [HttpGet]
         public IActionResult Upload()
         {
@@ -113,7 +113,6 @@ namespace App.WebUI.Controllers
             }
             return View(viewModel);
         }
-        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> Download([FromRoute]int id)
         {

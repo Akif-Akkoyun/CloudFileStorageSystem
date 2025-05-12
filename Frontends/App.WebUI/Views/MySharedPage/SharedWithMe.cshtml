@@ -43,11 +43,11 @@
                                         <td>@file.Permission</td>
                                         <td>@file.UploadDate.ToString("dd.MM.yyyy")</td>
                                         <td>
-                                            <a href="javascript:void(0);"class="btn btn-sm btn-info"data-id="@file.Id"onclick="loadFileDetail(this)">Detay</a>
+                                            <a href="javascript:void(0);"class="btn btn-sm btn-warning"data-id="@file.Id"onclick="loadFileDetail(this)">Detay</a>
 
                                             @if (User?.Identity != null && User.Identity.IsAuthenticated)
                                             {
-                                                <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-sm btn-success">İndir</a>
+                                                <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-sm btn-danger">İndir</a>
                                             }
                                         </td>
                                     </tr>
@@ -67,30 +67,23 @@
         </div>
     </div>
 </div>
-<style>
-    table tbody td {
-        color: whitesmoke
-    }
+@section Scripts {
+    <script>
+                function loadFileDetail(element) {
+            const id = element.getAttribute('data-id');
 
-    .btn {
-        color: black !important;
-    }
-</style>
-<script>
-    function loadFileDetail(element) {
-        const id = element.getAttribute('data-id');
-
-        fetch(`/MySharedPage/MyPageDetailsPartial/${id}`)
-            .then(response => {
-                if (!response.ok) throw new Error("Detay getirilemedi.");
-                return response.text();
-            })
-            .then(html => {
-                document.getElementById('file-detail-content').innerHTML = html;
-                new bootstrap.Modal(document.getElementById('fileDetailModal')).show();
-            })
-            .catch(err => {
-                alert("Detay yüklenemedi: " + err.message);
-            });
-    }
-</script>
+            fetch(`/MySharedPage/MyPageDetailsPartial/${id}`)
+                .then(response => {
+                    if (!response.ok) throw new Error("Detay getirilemedi.");
+                    return response.text();
+                })
+                .then(html => {
+                    document.getElementById('file-detail-content').innerHTML = html;
+                    new bootstrap.Modal(document.getElementById('fileDetailModal')).show();
+                })
+                .catch(err => {
+                    alert("Detay yüklenemedi: " + err.message);
+                });
+        }
+    </script>
+}
