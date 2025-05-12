@@ -19,22 +19,29 @@ namespace App.WebUI.Controllers
             {
                 return View(model);
             }
+
             var mapperDto = mapper.Map<LoginViewModel, LoginDto>(model);
             if (mapperDto is null)
             {
+                ViewBag.Error = "Veri işlenemedi.";
                 return View(model);
             }
+
             var client = _httpClientFactory.CreateClient("GatewayAPI");
             var response = await client.PostAsJsonAsync("/api/auth/login", mapperDto);
             if (!response.IsSuccessStatusCode)
             {
+                ViewBag.Error = "Kullanıcı adı veya şifre hatalı.";
                 return View(model);
             }
+
             var tokenDto = await response.Content.ReadFromJsonAsync<AuthTokenDto>();
             if (tokenDto is null)
             {
+                ViewBag.Error = "Giriş yapılamadı, lütfen tekrar deneyin.";
                 return View(model);
             }
+
             Response.Cookies.Append("auth-token", tokenDto.Token);
             return RedirectToAction("Index", "Home");
         }
@@ -48,8 +55,10 @@ namespace App.WebUI.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.Error = "Lütfen tüm alanları doğru şekilde doldurun.";
                 return View(model);
             }
+
             var dto = new RegisterDto
             {
                 Email = model.Email,
@@ -57,23 +66,33 @@ namespace App.WebUI.Controllers
                 UserSurName = model.SurName,
                 PasswordHash = model.Password,
             };
+
             if (dto is null)
             {
+                ViewBag.Error = "Veri işlenemedi. Lütfen tekrar deneyin.";
                 return View(model);
             }
+
             var client = _httpClientFactory.CreateClient("GatewayAPI");
             var response = await client.PostAsJsonAsync("/api/auth/register", dto);
+
             if (!response.IsSuccessStatusCode)
             {
+                ViewBag.Error = "Kayıt başarısız oldu. Bu email zaten kullanılıyor olabilir.";
                 return View(model);
             }
+
             var registerResponse = await response.Content.ReadFromJsonAsync<RegisterDto>();
+
             if (registerResponse is null)
             {
+                ViewBag.Error = "Sunucudan yanıt alınamadı. Lütfen tekrar deneyin.";
                 return View(model);
             }
+
             return RedirectToAction("Login", "Auth");
         }
+
         [HttpGet]
         public IActionResult ForgotPassword()
         {
@@ -84,28 +103,38 @@ namespace App.WebUI.Controllers
         {
             if (!ModelState.IsValid)
             {
+                ViewBag.Error = "Lütfen geçerli bir e-posta adresi giriniz.";
                 return View(viewModel);
             }
+
             var mapperDto = mapper.Map<ForgotPasswordViewModel, ForgotPasswordDto>(viewModel);
+
             if (mapperDto is null)
             {
+                ViewBag.Error = "Veri işlenemedi. Lütfen tekrar deneyin.";
                 return View(viewModel);
             }
+
             var client = _httpClientFactory.CreateClient("GatewayAPI");
             var response = await client.PostAsJsonAsync("/api/auth/forgot-password", mapperDto);
+
             if (!response.IsSuccessStatusCode)
             {
+                ViewBag.Error = "Mail gönderilemedi. Lütfen daha sonra tekrar deneyiniz.";
                 return View(viewModel);
             }
+
             var forgotPasswordResponse = await response.Content.ReadFromJsonAsync<ForgotPasswordDto>();
+
             if (forgotPasswordResponse is null)
             {
-                ModelState.AddModelError("", "İşlem başarısız.");
+                ViewBag.Error = "Sunucudan yanıt alınamadı.";
                 return View(viewModel);
             }
-            TempData["Info"] = "Mail gönderildi.";
+            TempData["Success"] = "E-posta adresinize şifre sıfırlama bağlantısı gönderildi.";
             return RedirectToAction("ForgotPassword");
         }
+
         [Route("/renew-password/{verificationCode}")]
         [HttpGet]
         public IActionResult RenewPassword([FromRoute] string verificationCode)
