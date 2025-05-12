@@ -8,50 +8,50 @@ Evet, tüm süreci hatırlıyorum. Projen çok katmanlı, mikroservis mimarisiyl
 This project is a multi-layered cloud file management system built with a microservices architecture, designed to provide secure file upload, storage, metadata management, and user-based access control. It includes advanced logging, authentication, and role-based authorization features. The system supports both public and private file visibility, user-to-user file sharing, and centralized logging using Serilog.
 
 🔧 Technologies & Tools Used
-.NET 8 – Entire backend infrastructure built using ASP.NET Core with latest LTS version
+`.NET 8` – Entire backend infrastructure built using ASP.NET Core with latest LTS version
 
-MediatR – Applied CQRS pattern for clean separation of commands and queries
+`MediatR` – Applied CQRS pattern for clean separation of commands and queries
 
-Entity Framework Core – Used with both SQLite and PostgreSQL in different services
+`Entity Framework Core` – Used with both SQLite and PostgreSQL in different services
 
-JWT (JSON Web Tokens) – Secured access to all APIs with authentication & role-based authorization
+`JWT (JSON Web Tokens)` – Secured access to all APIs with authentication & role-based authorization
 
-Serilog – Integrated structured, filtered logging in all services with per-event granularity
+`Serilog` – Integrated structured, filtered logging in all services with per-event granularity
 
-ASP.NET Core MVC – Used for the frontend client interface (Admin & Main UI)
+`ASP.NET Core MVC` – Used for the frontend client interface (Admin & Main UI)
 
-HttpClient & IHttpClientFactory – For inter-service communication via REST
+`HttpClient & IHttpClientFactory` – For inter-service communication via REST
 
-YARP (Yet Another Reverse Proxy) – Gateway routing and request forwarding
+`YARP (Yet Another Reverse Proxy)` – Gateway routing and request forwarding
 
-AutoMapper – For mapping between DTOs, ViewModels, and Entities
+`AutoMapper` – For mapping between DTOs, ViewModels, and Entities
 
-Bootstrap – Used for responsive and modern UI design in views
+`Bootstrap` – Used for responsive and modern UI design in views
 
-FluentValidation – Ensured input validation across DTOs
+`FluentValidation` – Ensured input validation across DTOs
 
-PostgreSQL & SQLite – Used independently in services (e.g. FileMetaData with PostgreSQL)
+`PostgreSQL & SQLite` – Used independently in services (e.g. FileMetaData with PostgreSQL)
 
-Logging – All services log only meaningful events with route-based filtering via Serilog
+`Logging` – All services log only meaningful events with route-based filtering via Serilog
 
 🧩 Architecture Overview
-Auth.Api
+`Auth.Api`
 Handles user registration, login, password reset and token generation.
 Uses SQLite + JWT + Serilog.
 
-FileMetaData.Api
+`FileMetaData.Api`
 Stores metadata for uploaded files: description, visibility, owner, share info.
 Uses PostgreSQL + MediatR + Serilog + Role-based Authorization.
 
-FileStorage.Api
+`FileStorage.Api`
 Handles the actual upload/download of physical files to disk.
 Uses simple file system logic with validation and logging.
 
-Gateway.Api
+`Gateway.Api`
 Central entry point using YARP for all routing.
 Logs every request with success, failure, and unmatched route details.
 
-Main.Mvc & Admin.Mvc
+`Main.Mvc & Admin.Mvc`
 MVC applications where users can log in, view their files, upload/download, manage visibility, and share files.
 Communicates with the APIs using HttpClient and passes the JWT token securely.
 
