@@ -24,6 +24,12 @@ namespace App.WebUI
                 .ForMember(dest => dest.UploadDate, opt => opt.Ignore());
             CreateMap<FileDetailViewModel, Dto.FileDtos.FileDetailDto>()
                 .ReverseMap();
+            CreateMap<FileDetailDto, FileUpdateViewModel>()
+            .ForMember(dest => dest.Visibility, opt => opt.MapFrom(src => src.Visibility.ToString()));
+
+            CreateMap<FileUpdateViewModel, FileUpdateDto>()
+                .ForMember(dest => dest.Visibility, opt => opt.MapFrom(src => Enum.Parse<Visibility>(src.Visibility, true)));
+
         }
     }
 }

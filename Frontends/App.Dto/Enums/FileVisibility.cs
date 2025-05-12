@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Dto.FileDtos
+namespace App.Dto.Enums
 {
-    public class FileUploadResponseDto
+    public enum FileVisibility
     {
-        public string FilePath { get; set; } = string.Empty;
+        Private,
+        Public,
+        Shared
     }
 }

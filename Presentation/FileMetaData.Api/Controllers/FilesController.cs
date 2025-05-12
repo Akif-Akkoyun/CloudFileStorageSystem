@@ -1,6 +1,7 @@
 ﻿using App.Application.Dtos.FileDtos;
 using App.Application.Features.File.Commands;
 using App.Application.Features.File.Queries;
+using App.Application.File.Features.File.Commands;
 using App.Application.File.Features.File.Handlers;
 using App.Application.File.Features.File.Queries;
 using MediatR;
@@ -40,7 +41,7 @@ namespace FileMetaData.Api.Controllers
             return CreatedAtAction(nameof(GetById), new { id = fileId }, new { id = fileId });
         }
 
-        [HttpPut]
+        [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] FileUpdateDto dto)
         {
             var result = await _mediator.Send(new UpdateFileMetaDataCommand(dto));
@@ -64,5 +65,21 @@ namespace FileMetaData.Api.Controllers
             var result = await _mediator.Send(new GetSharedWithMeQuery(id));
             return Ok(result);
         }
+        [HttpGet("owner/{ownerId}")]
+        public async Task<IActionResult> GetByOwnerId(int ownerId)
+        {
+            var result = await _mediator.Send(new GetFilesByOwnerIdQuery(ownerId));
+            return Ok(result);
+        }
+        [HttpPut("toggle-visibility/{id}")]
+        public async Task<IActionResult> ToggleVisibility(int id)
+        {
+            var result = await _mediator.Send(new ToggleFileVisibilityCommand(id));
+            if (!result.IsSuccess)
+                return BadRequest(result.Errors);
+
+            return NoContent();
+        }
+
     }
 }

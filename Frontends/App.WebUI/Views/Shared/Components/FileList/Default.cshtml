@@ -2,73 +2,100 @@
 
 @{
     ViewData["Title"] = "File List";
+    int count = 1;
 }
 
-<div class="container">
-    <div class="row">
-        <div class="col-md-12">
-            <h2 class="text-center">File List</h2>
-            <a id="addbutton" class="btn btn-primary" asp-controller="file" asp-action="upload">dosya yükle</a>
-            <table class="table table-bordered table-hover">
-                <thead>
-                    <tr>
-                        <th>
-                            Id
-                        </th>
-                        <th>
-                            Name
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th>
-                            Uploaddate
-                        </th>
-                        <th>
-                            Visibility
-                        </th>
-                        <th>
-                            View Details
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
+<section class="ftco-section ftco-no-pb" id="resume-section">
+    <div class="container">
+        <div class="row justify-content-center pb-5">
+            <div class="container">
+                <h2 class="text-center mb-4 fw-bold " style="font-size: 3rem;">Dosya Listesi</h2>
+                <div class="col-12 d-flex justify-content-end">
+                    @if (User.Identity.IsAuthenticated)
                     {
-                        <tr>
-                            <td>
-                                @item.Id
-                            </td>
-                            <td>
-                                @item.Name
-                            </td>
-                            <td>
-                                @item.Description
-                            </td>
-                            <td>
-                                @item.UploadDate.ToString("dd.MM.yyyy")
-                            </td>
-                            <td>
-                                @item.Visibility
-                            </td>
-                            <td>
-                                <a class="btn btn-info" asp-controller="File" asp-action="Details" asp-route-id="@item.Id">view</a>
-                                @if (User.Identity.IsAuthenticated)
-                                {
-                                    <a asp-controller="File" asp-action="Download" asp-route-id="@item.Id" class="btn btn-success btn-sm">İndir</a>
-                                }                                
-                            </td>
-                        </tr>
+                        <a id="addbutton" class="btn btn-warning mb-4" asp-controller="File" asp-action="Upload">Dosya Yükle</a>
                     }
-                </tbody>
-            </table>
+                </div>
+                @if (!Model.Any())
+                {
+                    <div class="alert alert-warning text-center">
+                        Henüz yüklenmiş dosyanız bulunmamaktadır.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover text-center align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Önizleme</th>
+                                    <th>Adı</th>
+                                    <th>Açıklama</th>
+                                    <th>Yüklenme Tarihi</th>
+                                    <th>Görünürlük</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var file in Model)
+                                {
+                                    var isImage = !string.IsNullOrEmpty(file.FilePath) &&
+                                    (file.FilePath.ToLower().EndsWith(".jpg") ||
+                                    file.FilePath.ToLower().EndsWith(".png") ||
+                                    file.FilePath.ToLower().EndsWith(".jpeg") ||
+                                    file.FilePath.ToLower().EndsWith(".webp"));
+                                    <tr>
+                                        <td>@count</td>
+                                        @{
+                                            count++;
+                                        }
+                                        <td>
+                                            @if (isImage)
+                                            {
+                                                <img src="@file.FilePath" alt="resim" style="height: 60px; border-radius: 6px;" />
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                        <td>@file.FileName</td>
+                                        <td>
+                                            @file.Description
+                                        </td>
+                                        <td>@file.UploadDate.ToString("dd.MM.yyyy")</td>
+                                        <td>@file.Visibility</td>
+                                        <td class="action-buttons mt-2">
+                                            <a class="btn btn-warning" asp-controller="File" asp-action="Details" asp-route-id="@file.Id">View</a>
+                                            @if (User.Identity.IsAuthenticated)
+                                            {
+                                                <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-info">İndir</a>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
         </div>
     </div>
-</div>
+</section>
+
 <style>
-    #addbutton {
-        position: relative;
-        bottom: 10px;
-        left: 80%;
+    .action-buttons {
+        width: 230px;
+    }
+
+    .btn-container .btn {
+        flex: 1 1 48%;
+        min-width: 120px;
+    }
+
+    .btn-container .btn {
+        flex: 1 1 48%;
+        min-width: 90px;
     }
 </style>
