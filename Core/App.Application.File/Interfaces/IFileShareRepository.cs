@@ -10,5 +10,6 @@ namespace App.Application.Interfaces.File
         Task<List<FileEntity>> GetFilesSharedWithUserAsync(int userId);
         Task CreateRangeAsync(IEnumerable<FileShareEntity> entities);
         Task<List<SharedWithMeDto>> GetSharedWithMeAsync(int userId);
+        Task<List<FileShareEntity>> GetByFileIdAsync(int fileId);
     }
 }

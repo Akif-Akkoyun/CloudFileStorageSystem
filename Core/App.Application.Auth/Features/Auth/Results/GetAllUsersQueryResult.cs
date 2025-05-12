@@ -4,11 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Dto.AuthDtos
+namespace App.Application.Auth.Features.Auth.Results
 {
-    public class AuthUserDto
+    public class GetAllUsersQueryResult
     {
         public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public string Name { get; set; } = default!;
     }
 }

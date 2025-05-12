@@ -1,9 +1,10 @@
 ﻿using App.Application.Dtos.FileDtos;
 using App.Application.Features.File.Commands;
 using App.Application.Features.File.Queries;
+using App.Application.File.Dtos;
 using App.Application.File.Features.File.Commands;
-using App.Application.File.Features.File.Handlers;
 using App.Application.File.Features.File.Queries;
+using Ardalis.Result;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -59,10 +60,10 @@ namespace FileMetaData.Api.Controllers
             var result = await _mediator.Send(new GetPublicFilesQuery());
             return Ok(result);
         }
-        [HttpGet("shared-with-me/({id})")]
-        public async Task<IActionResult> GetSharedWithMe([FromQuery] int id)
+        [HttpGet("shared-with-me/{userId}")]
+        public async Task<IActionResult> GetSharedWithMe([FromRoute] int userId)
         {
-            var result = await _mediator.Send(new GetSharedWithMeQuery(id));
+            var result = await _mediator.Send(new GetSharedWithMeQuery(userId));
             return Ok(result);
         }
         [HttpGet("owner/{ownerId}")]
@@ -80,6 +81,24 @@ namespace FileMetaData.Api.Controllers
 
             return NoContent();
         }
+        [HttpPost("share-file")]
+        public async Task<IActionResult> ShareFile([FromBody] ShareFileDto dto)
+        {
+            var result = await _mediator.Send(new ShareFileCommand(dto));
 
+            if (result.IsSuccess)
+                return Ok("File shared successfully.");
+
+            if (result.Status == ResultStatus.NotFound)
+                return NotFound("File not found.");
+
+            return BadRequest(result.Errors);
+        }
+        [HttpGet("get-shares-by-file/{fileId}")]
+        public async Task<IActionResult> GetSharesByFileId(int fileId)
+        {
+            var result = await _mediator.Send(new GetFileSharesByFileIdQuery(fileId));
+            return Ok(result);
+        }
     }
 }

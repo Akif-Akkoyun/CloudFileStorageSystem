@@ -1,0 +1,39 @@
+﻿@model ShareFileViewModel
+@{
+    ViewData["Title"] = "Dosya Paylaş";
+}
+
+<section class="ftco-section ftco-no-pb">
+    <div class="container">
+        <div class="row justify-content-center pb-5">
+            <div class="col-md-8">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <h4 class="card-title text-center mb-4">Dosyayı Paylaş</h4>
+                        <form asp-action="Share" asp-controller="MyPage" method="post">
+                            <input type="hidden" asp-for="Id" />
+                            <div class="mb-3">
+                                <label asp-for="SelectedUserIds" class="form-label">Kullanıcı Seç</label>
+                                <select asp-for="SelectedUserIds" asp-items="Model.AllUsers" multiple class="form-control" style="color:black">
+                                </select>
+                                <small class="form-text text-muted">CTRL veya CMD tuşuna basarak birden fazla kişi seçebilirsiniz.</small>
+                            </div>
+                            <div class="mb-3">
+                                <label asp-for="Permission" class="form-label">Paylaşım Yetkisi</label>
+                                <select asp-for="Permission" class="form-control">
+                                    <option value="ReadOnly">Sadece Görüntüle</option>
+                                    <option value="ReadWrite">Düzenleme Yetkili</option>
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary">Paylaş</button>
+                                <a asp-action="MyFiles" asp-controller="MyPage" class="btn btn-secondary ms-2">Geri Dön</a>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

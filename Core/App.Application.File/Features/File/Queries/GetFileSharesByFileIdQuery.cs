@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 
 namespace App.Application.File.Features.File.Queries
 {
-    public class GetFilesByOwnerIdQuery : IRequest<List<GetFilesByOwnerIdQueryResult>>
+    public class GetFileSharesByFileIdQuery : IRequest<List<GetFileSharesByFileIdQueryResult>>
     {
-        public int OwnerId { get; set; }
+        public int FileId { get; }
 
-        public GetFilesByOwnerIdQuery(int ownerId)
+        public GetFileSharesByFileIdQuery(int fileId)
         {
-            OwnerId = ownerId;
+            FileId = fileId;
         }
     }
 }

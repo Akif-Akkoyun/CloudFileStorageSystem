@@ -8,6 +8,9 @@ using App.Dto.FileDtos;
 using AutoMapper;
 using System.Text.Json;
 using App.Dto.AuthDtos;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security;
+using App.Dto.Enums;
 
 namespace App.WebUI.Controllers
 {
@@ -189,17 +192,108 @@ namespace App.WebUI.Controllers
                 var userResponse = await client.GetAsync($"/api/auth/users/{file.OwnerId}");
                 if (userResponse.IsSuccessStatusCode)
                 {
-                    var owner = await userResponse.Content.ReadFromJsonAsync<AuthUserDto>();
-                    file.OwnerName = owner?.UserName ?? "Bilinmiyor";
+                    var owner = await userResponse.Content.ReadFromJsonAsync<UserListDto>();
+                    file.OwnerName = owner?.Name ?? "Bilinmiyor";
                 }
                 else
                 {
                     file.OwnerName = "Bilinmiyor";
                 }
             }
-
             return View(viewModelList);
         }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> SharedFileDetails(int id)
+        {
+            var client = _httpClientFactory.CreateClient("GatewayAPI");
+            var token = Request.Cookies["auth-token"];
+            if (!string.IsNullOrEmpty(token))
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await client.GetAsync($"/api/files/{id}");
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Error"] = "Dosya detayına ulaşılamadı.";
+                return RedirectToAction("SharedWithMe");
+            }
+            var dto = await response.Content.ReadFromJsonAsync<FileDetailDto>();
+            var viewModel = _mapper.Map<FileDetailViewModel>(dto);
+            return View(viewModel);
+        }
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Share(int id)
+        {
+            var client = _httpClientFactory.CreateClient("GatewayAPI");
+            var token = Request.Cookies["auth-token"];
+            if (!string.IsNullOrWhiteSpace(token))
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var userResponse = await client.GetAsync("/api/auth/all-users");
+            if (!userResponse.IsSuccessStatusCode)
+                return View("Error");
 
+            var users = await userResponse.Content.ReadFromJsonAsync<List<AuthUserDto>>() ?? new();
+
+            var sharedUserIds = new List<int>();
+            var sharedResponse = await client.GetAsync($"/api/files/get-shares-by-file/{id}");
+            if (sharedResponse.IsSuccessStatusCode)
+            {
+                var shares = await sharedResponse.Content.ReadFromJsonAsync<List<GetSharesByFileIdDto>>() ?? new();
+                sharedUserIds = shares.Select(s => s.UserId).ToList();
+            }
+            var currentUserId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var model = new ShareFileViewModel
+            {
+                Id = id,
+                Permission = "ReadOnly",
+                AllUsers = users
+                    .Where(u => u.Id != currentUserId && !sharedUserIds.Contains(u.Id))
+                    .Select(u => new SelectListItem
+                    {
+                        Text = u.Name,
+                        Value = u.Id.ToString()
+                    }).ToList()
+            };
+            return View(model);
+        }
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Share(ShareFileViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var client = _httpClientFactory.CreateClient("GatewayAPI");
+            var token = Request.Cookies["auth-token"];
+            if (string.IsNullOrWhiteSpace(token))
+                return RedirectToAction("Login", "Auth");
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            if (string.IsNullOrWhiteSpace(model.Permission))
+            {
+                TempData["Error"] = "Paylaşım yetkisi seçilmedi.";
+                return View(model);
+            }
+
+            var dto = new ShareFileDto
+            {
+                FileId = model.Id,
+                SharedWithUserIds = model.SelectedUserIds,
+                Permission = model.Permission
+            };
+
+            var response = await client.PostAsJsonAsync("/api/files/share-file", dto);
+            var errorContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("API Hatası: " + errorContent);
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["Error"] = "Paylaşım başarısız oldu.";
+                return View(model);
+            }
+
+            TempData["Success"] = "Dosya başarıyla paylaşıldı.";
+            return RedirectToAction("MyFiles", "MyPage");
+        }
     }
 }
