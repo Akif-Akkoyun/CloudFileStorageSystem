@@ -1,4 +1,5 @@
-﻿using App.Application.Dtos.AuthDtos;
+﻿using App.Application.Auth.Features.Auth.Queries;
+using App.Application.Dtos.AuthDtos;
 using App.Application.Features.Auth.Commands;
 using Ardalis.Result;
 using MediatR;
@@ -103,6 +104,18 @@ namespace Authentication.Api.Controllers
         {
             Response.Cookies.Delete("access_token");
             return Ok(new { message = "Çıkış yapıldı" });
+        }
+        [HttpGet("users/{ownerId}")]
+        public async Task<IActionResult> Users([FromRoute] int ownerId)
+        {
+            var userList = await _mediator.Send(new GetUserByIdQuery(ownerId));
+            return Ok(userList);
+        }
+        [HttpGet("all-users")]
+        public async Task<IActionResult> AllUser()
+        {
+            var userList = await _mediator.Send(new GetAllUsersQuery());
+            return Ok(userList);
         }
     }
 }

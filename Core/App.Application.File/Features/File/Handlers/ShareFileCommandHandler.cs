@@ -36,7 +36,7 @@ namespace App.Application.File.Features.File.Handlers
 
                 FileId = request.Dto.FileId,
                 UserId = userId,
-                Permission = request.Dto.Permission.ToString()
+                Permission = request.Dto.Permission
             });
 
             await _fileShareRepository.CreateRangeAsync(shareEntities); 

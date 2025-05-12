@@ -1,12 +1,10 @@
-﻿using App.Domain.Enums;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace App.Application.File.Dtos
+namespace App.Dto.FileDtos
 {
     public class ShareFileDto
     {

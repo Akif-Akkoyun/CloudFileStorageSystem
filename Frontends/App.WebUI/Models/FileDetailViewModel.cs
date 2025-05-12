@@ -25,5 +25,6 @@ namespace App.WebUI.Models
 
         [Display(Name = "Yükleyen Kullanıcı")]
         public string OwnerName { get; set; } = default!;
+        public string Permission { get; set; } = "ReadOnly";
     }
 }
