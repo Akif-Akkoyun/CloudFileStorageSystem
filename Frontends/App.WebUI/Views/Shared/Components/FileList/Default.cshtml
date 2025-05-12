@@ -2,119 +2,33 @@
 
 @{
     ViewData["Title"] = "File List";
-    int count = 1;
 }
 
-<section class="ftco-section ftco-no-pb" id="resume-section">
+<section class="ftco-section ftco-project" id="projects-section">
     <div class="container">
         <div class="row justify-content-center pb-5">
-            <div class="container">
-                <h2 class="text-center mb-4 fw-bold " style="font-size: 3rem;">Dosya Listesi</h2>
-                <div class="col-12 d-flex justify-content-end">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a id="addbutton" class="btn btn-warning mb-4" asp-controller="File" asp-action="Upload">Dosya Yükle</a>
-                    }
-                </div>
-                @if (!Model.Any())
-                {
-                    <div class="alert alert-warning text-center">
-                        Henüz yüklenmiş dosyanız bulunmamaktadır.
-                    </div>
-                }
-                else
-                {
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover text-center align-middle">
-                            <thead class="table-dark">
-                                <tr>
-                                    <th>#</th>
-                                    <th>Önizleme</th>
-                                    <th>Adı</th>
-                                    <th>Açıklama</th>
-                                    <th>Yüklenme Tarihi</th>
-                                    <th>Görünürlük</th>
-                                    <th>İşlemler</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var file in Model)
-                                {
-                                    var isImage = !string.IsNullOrEmpty(file.FilePath) &&
-                                    (file.FilePath.ToLower().EndsWith(".jpg") ||
-                                    file.FilePath.ToLower().EndsWith(".png") ||
-                                    file.FilePath.ToLower().EndsWith(".jpeg") ||
-                                    file.FilePath.ToLower().EndsWith(".webp"));
-                                    <tr>
-                                        <td>@count</td>
-                                        @{
-                                            count++;
-                                        }
-                                        <td>
-                                            @if (isImage)
-                                            {
-                                                <img src="@file.FilePath" alt="resim" style="height: 60px; border-radius: 6px;" />
-                                            }
-                                            else
-                                            {
-                                                <span class="text-muted">-</span>
-                                            }
-                                        </td>
-                                        <td>@file.FileName</td>
-                                        <td>
-                                            @file.Description
-                                        </td>
-                                        <td>@file.UploadDate.ToString("dd.MM.yyyy")</td>
-                                        <td>@file.Visibility</td>
-                                        <td class="action-buttons mt-2">
-                                            <a class="btn btn-warning" asp-controller="File" asp-action="Details" asp-route-id="@file.Id">View</a>
-                                            @if (User.Identity.IsAuthenticated)
-                                            {
-                                                <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-info">İndir</a>
-                                            }
-                                        </td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
+            <div class="col-md-12 heading-section text-center ftco-animate">
+                <h1 class="big big-2" style="font-size: 5rem;">Yüklenenler</h1>
+                <h2 class="mb-4">Yüklenenler</h2>
+                <p>Kullanıcılarımızın son yükledikleri.</p>
             </div>
+        </div>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-md-4">
+                    <div class="project img ftco-animate d-flex justify-content-center align-items-center" style="background-image: url(@item.FilePath);">
+                        <a href="/File/Details/@item.Id">
+                            <div class="overlay"></div>
+                            <div class="text text-center p-4">
+                                <h3>@item.Description</h3>
+                                <span>@item.Visibility</span>
+                                <span>@item.UploadDate.ToString("dd.MM.yyyy")</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </section>
-
-<style>
-    .action-buttons {
-        width: 230px;
-    }
-
-    .btn-container .btn {
-        flex: 1 1 48%;
-        min-width: 120px;
-    }
-
-    .btn-container .btn {
-        flex: 1 1 48%;
-        min-width: 90px;
-    }
-     table tbody td {
-        color: whitesmoke
-    }
-
-    .btn {
-        color: black !important;
-    }
-
-    #resume-section {
-        padding-top: 50px !important;
-    }
-
-    .ftco-section {
-        padding-top: 30px !important;
-    }
-
-    .pb-5 {
-        padding-bottom: 3rem !important;
-    }
-</style>

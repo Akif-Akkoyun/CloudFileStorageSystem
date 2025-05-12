@@ -44,7 +44,7 @@
                                         <td>@file.UploadDate.ToString("dd.MM.yyyy")</td>
                                         <td>
                                             <a asp-controller="File" asp-action="Details" asp-route-id="@file.Id" class="btn btn-sm btn-info">Detay</a>
-                                            @if (User.Identity.IsAuthenticated)
+                                            @if (User?.Identity != null && User.Identity.IsAuthenticated)
                                             {
                                                 <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-sm btn-success">İndir</a>
                                             }

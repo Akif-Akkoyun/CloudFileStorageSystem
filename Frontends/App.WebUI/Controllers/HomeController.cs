@@ -16,7 +16,9 @@ namespace App.WebUI.Controllers
         {
             return View();
         }
-
-       
+        public IActionResult EnteredUnauthorized()
+        {
+            return View();
+        }
     }
 }

@@ -57,7 +57,7 @@
                                         </table>
                                     </div>
 
-                                    @if (User.Identity.IsAuthenticated)
+                                    @if (User?.Identity != null && User.Identity.IsAuthenticated)
                                     {
                                         <a asp-controller="File" asp-action="Download" asp-route-id="@Model.Id" class="btn btn-success mt-3">Dosyayı İndir</a>
                                         <a asp-controller="MyPage" asp-action="Share" asp-route-id="@Model.Id" class="btn btn-info mt-3">Paylaş</a>

@@ -10,16 +10,19 @@
                 <ul class="navbar-nav nav mr-auto">
                     <li class="nav-item">
                         <a asp-action="Index" asp-controller="Home" class="nav-link"><span>Ana Sayfa</span></a>
-                        @if (User.Identity.IsAuthenticated)
-                        {
+                    </li>
+                    <li class="nav-item">
+                        <a asp-action="Upload" asp-controller="File" class="nav-link"><span>Dosya Yükle</span></a>
+                    </li>
+                    @if (User?.Identity != null && User.Identity.IsAuthenticated)
+                    {
                         <li class="nav-item"><a asp-action="MyFiles" asp-controller="MyPage" class="nav-link"><span>Dosyalarım</span></a></li>
                         <li class="nav-item"><a asp-action="SharedWithMe" asp-controller="MySharedPage" class="nav-link"><span>Benimle Paylaşılan</span></a></li>
                         <li class="nav-item"><a asp-action="SharedByMe" asp-controller="MySharedPage" class="nav-link"><span>Benim Paylaştığım</span></a></li>
-                        }                        
-                    </li>
+                    }
                 </ul>
                 <ul class="navbar-nav nav ml-auto">
-                    @if (User.Identity.IsAuthenticated)
+                    @if (User?.Identity != null && User.Identity.IsAuthenticated)
                     {
                         <li class="nav-item"><a asp-action="Logout" asp-controller="Auth" class="nav-link"><span>Logout</span></a></li>
                     }
