@@ -31,27 +31,6 @@ namespace Authentication.Api
             if (string.IsNullOrEmpty(connectionString))
                 throw new InvalidOperationException("Connection string is not set in appsettings.json");
             services.AddAuthApi(connectionString);
-            
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidIssuer = configuration["JWT:Issuer"],
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero,
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!)),
-                    NameClaimType = JwtClaimTypes.Name,
-                    RoleClaimType = JwtClaimTypes.Role
-                };
-            });
         }
     }
 }
