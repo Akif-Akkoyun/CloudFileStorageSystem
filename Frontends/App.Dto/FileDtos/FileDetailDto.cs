@@ -15,6 +15,6 @@ namespace App.Dto.FileDtos
         public string FilePath { get; set; } = default!;
         public DateTime UploadDate { get; set; }
         public FileVisibility Visibility { get; set; }
-        public string OwnerName { get; set; } = default!;
+        public string? OwnerName { get; set; }
     }
 }

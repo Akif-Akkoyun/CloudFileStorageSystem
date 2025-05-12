@@ -23,12 +23,17 @@ namespace App.WebUI.ViewComponents
             }
 
             var fileList = await response.Content.ReadFromJsonAsync<List<FileListViewModel>>();
+
             if (fileList == null)
             {
                 return View("Error");
             }
 
-            return View(fileList);
+            var orderList = fileList
+                .OrderByDescending(x => x.Id)
+                .Take(6)
+                .ToList();
+            return View(orderList);
         }
     }
 }

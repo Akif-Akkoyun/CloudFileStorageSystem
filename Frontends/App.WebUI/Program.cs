@@ -17,7 +17,17 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+app.UseStatusCodePages(context =>
+{
+    var response = context.HttpContext.Response;
 
+    if (response.StatusCode == 401)
+    {
+        response.Redirect("/Home/EnteredUnauthorized");
+    }
+
+    return Task.CompletedTask;
+});
 app.UseRouting();
 app.UseSession();
 app.UseAuthentication();

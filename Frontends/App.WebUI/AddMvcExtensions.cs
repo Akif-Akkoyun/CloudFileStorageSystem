@@ -44,7 +44,7 @@ namespace App.WebUI
                     ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero,
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"] ?? throw new InvalidOperationException("Key not found")))
                 };
             });
         }

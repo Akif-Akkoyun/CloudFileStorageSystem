@@ -39,11 +39,13 @@ namespace App.WebUI.Controllers
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
-            Console.WriteLine("Token -> " + token);
-
             using var content = new MultipartFormDataContent();
+            if (viewModel.File == null || viewModel.File.Length == 0)
+            {
+                TempData["Error"] = "Lütfen bir dosya seçiniz.";
+                return RedirectToAction("Upload");
+            }
             content.Add(new StreamContent(viewModel.File.OpenReadStream()), "file", viewModel.File.FileName);
-
             var uploadResponse = await client.PostAsync("/api/storages/upload", content);
             if (!uploadResponse.IsSuccessStatusCode)
             {
@@ -52,6 +54,11 @@ namespace App.WebUI.Controllers
             }
             var uploadResult = await uploadResponse.Content.ReadFromJsonAsync<FileUploadResponseDto>();
             var filePath = uploadResult?.FilePath;
+            if (string.IsNullOrEmpty(filePath))
+            {
+                TempData["Error"] = "Dosya yüklenemedi. Lütfen tekrar deneyin.";
+                return RedirectToAction("Upload");
+            }
             var dto = _mapper.Map<FileMetaDataDto>(viewModel);
             dto.FileName = viewModel.File.FileName;
             dto.Description = viewModel.Description;
@@ -83,17 +90,27 @@ namespace App.WebUI.Controllers
                 TempData["Error"] = "Bu dosyanın detaylarını görmeye yetkiniz yok.";
                 return RedirectToAction("Index", "Home");
             }
+            if (!response.IsSuccessStatusCode || response.Content.Headers.ContentLength == 0)
+            {
+                TempData["Error"] = "Dosya verisi alınamadı.";
+                return RedirectToAction("Index", "Home");
+            }
             if (!response.IsSuccessStatusCode)
             {
                 return View("Error");
             }
             var dto = await response.Content.ReadFromJsonAsync<FileDetailDto>();
-            if (dto == null)
+            if (dto is null)
             {
                 TempData["Error"] = "Dosya bulunamadı.";
                 return RedirectToAction("Index", "Home");
             }
             var viewModel = _mapper.Map<FileDetailViewModel>(dto);
+            if(viewModel is null)
+            {
+                TempData["Error"] = "Dosya detayları alınamadı.";
+                return RedirectToAction("Index", "Home");
+            }
             return View(viewModel);
         }
         [Authorize(Roles = "User")]
