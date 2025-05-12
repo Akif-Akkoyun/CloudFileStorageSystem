@@ -29,6 +29,8 @@ namespace App.WebUI
 
             CreateMap<FileUpdateViewModel, FileUpdateDto>()
                 .ForMember(dest => dest.Visibility, opt => opt.MapFrom(src => Enum.Parse<Visibility>(src.Visibility, true)));
+            CreateMap<SharedWithMeDto, SharedWithMeViewModel>()
+                .ReverseMap();
 
         }
     }

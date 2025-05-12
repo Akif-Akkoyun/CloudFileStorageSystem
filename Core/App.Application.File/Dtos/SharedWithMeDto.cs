@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Application.File.Features.File.Results
+namespace App.Application.File.Dtos
 {
-    public class GetSharedWithMeQueryResult
+    public class SharedWithMeDto
     {
         public int Id { get; set; }
         public string FileName { get; set; } = default!;
@@ -15,5 +15,7 @@ namespace App.Application.File.Features.File.Results
         public string FilePath { get; set; } = default!;
         public FileVisibility Visibility { get; set; }
         public DateTime UploadDate { get; set; }
+        public int OwnerId { get; set; }
+        public string Permission { get; set; } = "";
     }
 }
