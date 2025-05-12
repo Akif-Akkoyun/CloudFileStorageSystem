@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,13 @@ namespace App.Dto.FileDtos
     {
         public int UserId { get; set; }
         public string Permission { get; set; } = "";
+    }
+    public class  GetSaresByFileIdDtoValidator : AbstractValidator<GetSharesByFileIdDto>
+    {
+        public GetSaresByFileIdDtoValidator()
+        {
+            RuleFor(x => x.UserId).NotEmpty().WithMessage("UserId is required.");
+            RuleFor(x => x.Permission).NotEmpty().WithMessage("Permission is required.");
+        }
     }
 }

@@ -1,9 +1,5 @@
 ﻿using App.Dto.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FluentValidation;
 
 namespace App.Dto.FileDtos
 {
@@ -17,5 +13,26 @@ namespace App.Dto.FileDtos
         public DateTime UploadDate { get; set; }
         public int OwnerId { get; set; }
         public string Permission { get; set; } = "";
+    }
+    public class SharedWithMeDtoValidator : AbstractValidator<SharedWithMeDto>
+    {
+        public SharedWithMeDtoValidator()
+        {
+            RuleFor(x => x.FileName)
+                .NotEmpty()
+                .WithMessage("File name is required.")
+                .MaximumLength(255)
+                .WithMessage("File name must not exceed 255 characters.");
+            RuleFor(x => x.Description)
+                .NotEmpty()
+                .WithMessage("Description is required.")
+                .MaximumLength(500)
+                .WithMessage("Description must not exceed 500 characters.");
+            RuleFor(x => x.FilePath)
+                .NotEmpty()
+                .WithMessage("File path is required.")
+                .MaximumLength(500)
+                .WithMessage("File path must not exceed 500 characters.");
+        }
     }
 }
