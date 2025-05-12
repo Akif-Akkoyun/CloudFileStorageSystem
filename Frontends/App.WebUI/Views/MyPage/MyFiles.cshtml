@@ -66,11 +66,11 @@
                                         <td class="action-buttons mt-2">
                                             <div class="btn-container">
                                                 <div class="container">
-                                                    <a asp-controller="File" asp-action="Details" asp-route-id="@file.Id" class="btn btn-sm btn-info">Detay</a>
-                                                    <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-sm btn-success">İndir</a>
+                                                    <a href="javascript:void(0);" class="btn btn-sm btn-warning" data-id="@file.Id" onclick="loadFileDetail(this)">Detay</a>
+                                                    <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-sm btn-danger">İndİr</a>
                                                     <form asp-controller="MyPage" asp-action="ToggleVisibility" asp-route-id="@file.Id" method="post" style="display:inline;">
                                                         <button type="submit" class="btn btn-sm btn-warning">
-                                                            @((file.Visibility == Visibility.Public) ? "Gizle" : "Yayına Al")
+                                                            @((file.Visibility == Visibility.Public) ? "GİZLE" : "Yayına Al")
                                                         </button>
                                                     </form>
                                                 </div>
@@ -78,11 +78,11 @@
                                                     <form asp-controller="MyPage" asp-action="Delete" asp-route-id="@file.Id" method="post" style="display:inline;">
                                                         <button type="submit" class="btn btn-sm btn-danger"
                                                                 onclick="return confirm('Silmek istediğinize emin misiniz?')">
-                                                            Sil
+                                                            SİL
                                                         </button>
                                                     </form>
-                                                    <a asp-controller="MyPage" asp-action="Update" asp-route-id="@file.Id" class="btn btn-sm btn-primary">Güncelle</a>
-                                                    <a asp-controller="MySharedPage" asp-action="ShareFile" asp-route-id="@file.Id" class="btn btn-sm btn-primary">Paylaş</a>
+                                                    <a asp-controller="MyPage" asp-action="Update" asp-route-id="@file.Id" class="btn btn-sm btn-warning">Güncelle</a>
+                                                    <a asp-controller="MySharedPage" asp-action="ShareFile" asp-route-id="@file.Id" class="btn btn-sm btn-danger">Paylaş</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -96,7 +96,12 @@
         </div>
     </div>
 </section>
-
+<div class="modal fade" id="fileDetailModal" tabindex="-1" aria-labelledby="fileDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-dark text-white" id="file-detail-content">
+        </div>
+    </div>
+</div>
 <style>
     .action-buttons {
         width: 350px;
@@ -120,3 +125,21 @@
         color: black !important;
     }
 </style>
+<script>
+    function loadFileDetail(element) {
+        const id = element.getAttribute('data-id');
+
+        fetch(`/MySharedPage/MyPageDetailsPartial/${id}`)
+            .then(response => {
+                if (!response.ok) throw new Error("Detay getirilemedi.");
+                return response.text();
+            })
+            .then(html => {
+                document.getElementById('file-detail-content').innerHTML = html;
+                new bootstrap.Modal(document.getElementById('fileDetailModal')).show();
+            })
+            .catch(err => {
+                alert("Detay yüklenemedi: " + err.message);
+            });
+    }
+</script>

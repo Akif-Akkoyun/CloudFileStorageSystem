@@ -43,7 +43,8 @@
                                         <td>@file.Permission</td>
                                         <td>@file.UploadDate.ToString("dd.MM.yyyy")</td>
                                         <td>
-                                            <a asp-controller="File" asp-action="Details" asp-route-id="@file.Id" class="btn btn-sm btn-info">Detay</a>
+                                            <a href="javascript:void(0);"class="btn btn-sm btn-info"data-id="@file.Id"onclick="loadFileDetail(this)">Detay</a>
+
                                             @if (User?.Identity != null && User.Identity.IsAuthenticated)
                                             {
                                                 <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-sm btn-success">İndir</a>
@@ -60,6 +61,12 @@
         </div>
     </div>
 </section>
+<div class="modal fade" id="fileDetailModal" tabindex="-1" aria-labelledby="fileDetailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content bg-dark text-white" id="file-detail-content">
+        </div>
+    </div>
+</div>
 <style>
     table tbody td {
         color: whitesmoke
@@ -69,3 +76,21 @@
         color: black !important;
     }
 </style>
+<script>
+    function loadFileDetail(element) {
+        const id = element.getAttribute('data-id');
+
+        fetch(`/MySharedPage/MyPageDetailsPartial/${id}`)
+            .then(response => {
+                if (!response.ok) throw new Error("Detay getirilemedi.");
+                return response.text();
+            })
+            .then(html => {
+                document.getElementById('file-detail-content').innerHTML = html;
+                new bootstrap.Modal(document.getElementById('fileDetailModal')).show();
+            })
+            .catch(err => {
+                alert("Detay yüklenemedi: " + err.message);
+            });
+    }
+</script>
