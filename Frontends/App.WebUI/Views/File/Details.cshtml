@@ -25,16 +25,16 @@
                                     @if (isImage)
                                     {
                                         <img src="@Model.FilePath"
-                                         alt="@Model.FileName"
-                                         class="img-fluid mb-4"
-                                         style="max-height: 400px; border-radius: 10px;" />
-                                    <h4 class="card-title mt-3">@Model.FileName</h4>
+                                        alt="@Model.FileName"
+                                        class="img-fluid mb-4"
+                                        style="max-height: 400px; border-radius: 10px;" />
+                                        <h4 class="card-title mt-3" style="color:black">@Model.FileName</h4>
                                     } 
-                                    
+
                                     <p class="card-subtitle mb-4 text-muted">Dosya Detayları</p>
 
                                     <div class="table-responsive mt-4">
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered table-black">
                                             <tbody>
                                                 <tr>
                                                     <th style="width: 30%;">Açıklama</th>
@@ -50,16 +50,25 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Dosya Adı</th>
-                                                    <td>
-                                                        <a href="@Model.FilePath" target="_blank">@Model.FilePath.Split("/").Last()</a>
-                                                    </td>
+                                                    @if (User?.Identity != null && User.Identity.IsAuthenticated)
+                                                    {
+                                                        <td>
+                                                            <a href="@Model.FilePath" target="_blank">@Model.FilePath.Split("/").Last()</a>
+                                                        </td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td>
+                                                            <a href="#">@Model.FilePath.Split("/").Last()</a>
+                                                        </td>
+                                                    }                                                    
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
                                     @if (User?.Identity != null && User.Identity.IsAuthenticated)
                                     {
-                                        <a asp-controller="File" asp-action="Download" asp-route-id="@Model.Id" class="btn btn-success mt-3">Dosyayı İndir </a>
+                                        <a asp-controller="File" asp-action="Download" asp-route-id="@Model.Id" class="btn btn-warning mt-3">Dosyayı İndir </a>
                                     }
                                     else
                                     {
@@ -76,3 +85,9 @@
         </div>
     </div>
 </section>
+<style>
+    .table-black td,
+    .table-black th {
+        color: black !important;
+    }
+</style>

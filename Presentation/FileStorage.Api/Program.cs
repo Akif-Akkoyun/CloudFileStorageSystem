@@ -1,10 +1,12 @@
 using FileStorage.Api;
 using Microsoft.Extensions.FileProviders;
+using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddFileStorageExtensiosn();
+builder.Host.UseSerilog();
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {

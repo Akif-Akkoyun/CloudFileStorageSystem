@@ -12,9 +12,9 @@ using System.Net;
 
 namespace App.WebUI.Controllers
 {
+    [Authorize(Roles = "User")]
     public class MySharedPageController(IHttpClientFactory _httpClientFactory, IMapper _mapper) : Controller
     {
-        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> SharedWithMe()
         {
@@ -58,7 +58,6 @@ namespace App.WebUI.Controllers
             }
             return View(viewModelList);
         }
-        [Authorize]
         [HttpGet]
         public async Task<IActionResult> ShareFile(int id)
         {
@@ -94,7 +93,6 @@ namespace App.WebUI.Controllers
             };
             return View(model);
         }
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> ShareFile(ShareFileViewModel model)
         {
@@ -133,7 +131,6 @@ namespace App.WebUI.Controllers
             TempData["Success"] = "Dosya başarıyla paylaşıldı.";
             return RedirectToAction("MyFiles", "MyPage");
         }
-        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> SharedByMe()
         {
