@@ -20,10 +20,6 @@
                 }
                 else
                 {
-                    <a asp-controller="MyPage" asp-action="SharedWithMe" class="btn btn-sm btn-info">Benimle Paylaşılan Dosyalar</a>
-
-                    <a asp-controller="MyPage" asp-action="SharedFileDetails" class="btn btn-sm btn-info">Paylaşılan Dosya Detayı</a>
-
                     <div class="table-responsive">
                         <table class="table table-bordered table-hover text-center align-middle">
                             <thead class="table-dark">
@@ -86,7 +82,7 @@
                                                         </button>
                                                     </form>
                                                     <a asp-controller="MyPage" asp-action="Update" asp-route-id="@file.Id" class="btn btn-sm btn-primary">Güncelle</a>
-                                                    <a asp-controller="MyPage" asp-action="Share" asp-route-id="@file.Id" class="btn btn-sm btn-primary">Paylaş</a>
+                                                    <a asp-controller="MySharedPage" asp-action="ShareFile" asp-route-id="@file.Id" class="btn btn-sm btn-primary">Paylaş</a>
                                                 </div>
                                             </div>
                                         </td>

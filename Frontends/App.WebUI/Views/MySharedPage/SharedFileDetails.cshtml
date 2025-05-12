@@ -11,7 +11,7 @@
                 <div class="container-fluid">
                     <div class="row justify-content-center">
                         <div class="col-xl-10">
-                            <div class="card">
+                            <div class="card bg-dark text-white">
                                 <div class="card-body text-center">
 
                                     @{
@@ -33,36 +33,38 @@
 
                                     <h4 class="card-title mt-3">@Model.FileName</h4>
                                     <p class="card-subtitle mb-4 text-muted">Paylaşılan Dosya Detayları</p>
+
                                     <div class="table-responsive mt-4">
-                                        <table class="table table-bordered">
+                                        <table class="table table-bordered text-white">
                                             <tbody>
                                                 <tr>
-                                                    <th>Açıklama</th>
+                                                    <th class="bg-secondary">Açıklama</th>
                                                     <td>@Model.Description</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Yüklenme Tarihi</th>
+                                                    <th class="bg-secondary">Yüklenme Tarihi</th>
                                                     <td>@Model.UploadDate.ToString("dd.MM.yyyy HH:mm")</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Görünürlük</th>
+                                                    <th class="bg-secondary">Görünürlük</th>
                                                     <td>@Model.Visibility</td>
                                                 </tr>
                                                 <tr>
-                                                    <th>Paylaşım Yetkisi</th>
+                                                    <th class="bg-secondary">Paylaşım Yetkisi</th>
                                                     <td>@Model.Permission</td>
                                                 </tr>
                                             </tbody>
                                         </table>
                                     </div>
+
                                     @if (User.Identity.IsAuthenticated)
                                     {
                                         <a asp-controller="File" asp-action="Download" asp-route-id="@Model.Id" class="btn btn-success mt-3">Dosyayı İndir</a>
-                                        <a asp-controller="MyPage" asp-action="Share" asp-route-id="@Model.Id" class="btn btn-success mt-3">Paylaş</a>
+                                        <a asp-controller="MyPage" asp-action="Share" asp-route-id="@Model.Id" class="btn btn-info mt-3">Paylaş</a>
                                     }
                                     else
                                     {
-                                        <div class="alert alert-warning mt-3">
+                                        <div class="alert alert-warning mt-3 text-dark bg-light">
                                             Dosyayı indirebilmek için giriş yapmanız gerekmektedir.
                                         </div>
                                     }
@@ -76,3 +78,27 @@
         </div>
     </div>
 </section>
+
+<style>
+    body {
+        background-color: #121212;
+        color: white;
+    }
+
+    .table td, .table th {
+        color: white;
+        border-color: #555;
+    }
+
+    .btn {
+        color: white !important;
+    }
+
+    .card-title, .card-subtitle {
+        color: white;
+    }
+
+    .alert {
+        color: black;
+    }
+</style>

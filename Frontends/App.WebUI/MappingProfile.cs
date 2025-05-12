@@ -31,6 +31,7 @@ namespace App.WebUI
                 .ForMember(dest => dest.Visibility, opt => opt.MapFrom(src => Enum.Parse<Visibility>(src.Visibility, true)));
             CreateMap<SharedWithMeDto, SharedWithMeViewModel>()
                 .ReverseMap();
+            CreateMap<SharedByMeDto, SharedByMeViewModel>();
 
         }
     }
