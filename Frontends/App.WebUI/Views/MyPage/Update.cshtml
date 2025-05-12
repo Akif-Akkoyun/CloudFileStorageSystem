@@ -1,0 +1,49 @@
+﻿@model FileUpdateViewModel
+
+@{
+    ViewData["Title"] = "Dosya Güncelle";
+}
+
+<section class="ftco-section ftco-no-pb" id="resume-section">
+    <div class="container">
+        <div class="row justify-content-center pb-5">
+            <div class="container mt-5">
+                <h2 class="text-center mb-4">Dosya Güncelle</h2>
+
+                <form asp-action="Update" asp-controller="MyPage" method="post" enctype="multipart/form-data">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="FilePath" />
+
+                    <div class="mb-3">
+                        <label asp-for="FileName" class="form-label">Dosya Adı</label>
+                        <input asp-for="FileName" class="form-control" />
+                        <span asp-validation-for="FileName" class="text-danger"></span>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label">Açıklama</label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Visibility" class="form-label">Görünürlük</label>
+                        <select asp-for="Visibility" class="form-control">
+                            <option value="Private">Private</option>
+                            <option value="Public">Public</option>
+                            <option value="Shared">Shared</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="NewFile" class="form-label">Yeni Dosya (opsiyonel)</label>
+                        <input asp-for="NewFile" type="file" class="form-control" />
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Güncelle</button>
+                    <a asp-action="MyFiles" asp-controller="MyPage" class="btn btn-secondary">İptal</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+

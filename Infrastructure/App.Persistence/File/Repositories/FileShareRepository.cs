@@ -45,5 +45,10 @@ namespace App.Persistence.File.Repositories
                 .Select(fs => fs.File)
                 .ToListAsync();
         }
+        public async Task CreateRangeAsync(IEnumerable<FileShareEntity> entities)
+        {
+            await _context.FileShares.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+        }
     }
 }

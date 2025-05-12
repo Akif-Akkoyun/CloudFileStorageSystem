@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace App.Dto.FileDtos
+namespace App.Domain.Enums
 {
-    public class FileUploadResponseDto
+    public enum FilePermission
     {
-        public string FilePath { get; set; } = string.Empty;
+        ReadOnly = 0,
+        ReadWrite = 1
     }
 }

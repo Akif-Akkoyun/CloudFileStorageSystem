@@ -1,0 +1,121 @@
+﻿@model List<MyPageListViewModel>
+@{
+    ViewData["Title"] = "Dosyalarım";
+    int count = 1;
+}
+
+
+<section class="ftco-section ftco-no-pb" id="resume-section">
+    <div class="container">
+        <div class="row justify-content-center pb-5">
+            <div class="container">
+                <h2 class="text-center mb-5 fw-bold " style="font-size: 3rem;">Yüklediğim Dosyalar</h2>
+
+
+                @if (!Model.Any())
+                {
+                    <div class="alert alert-warning text-center">
+                        Henüz yüklenmiş dosyanız bulunmamaktadır.
+                    </div>
+                }
+                else
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover text-center align-middle">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>#</th>
+                                    <th>Önizleme</th>
+                                    <th>Adı</th>
+                                    <th>Görünürlük</th>
+                                    <th>Yüklenme Tarihi</th>
+                                    <th>İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var file in Model)
+                                {
+                                    var isImage = !string.IsNullOrEmpty(file.FilePath) &&
+                                    (file.FilePath.ToLower().EndsWith(".jpg") ||
+                                    file.FilePath.ToLower().EndsWith(".png") ||
+                                    file.FilePath.ToLower().EndsWith(".jpeg") ||
+                                    file.FilePath.ToLower().EndsWith(".webp"));
+
+                                    <tr>
+                                        <td class="color">@count</td>
+                                        @{
+                                            count++;
+                                        }
+                                        <td class="color">
+                                            @if (isImage)
+                                            {
+                                                <img src="@file.FilePath" alt="resim" style="height: 60px; border-radius: 6px;" />
+                                            }
+                                            else
+                                            {
+                                                <span class="text-muted">-</span>
+                                            }
+                                        </td>
+                                        <td class="color">@file.FileName</td>
+                                        <td>
+                                            <span class="badge bg-@(file.Visibility == Visibility.Public ? "success" : "secondary")">
+                                                @file.Visibility
+                                            </span>
+                                        </td>
+                                        <td class="color">@file.UploadDate.ToString("dd.MM.yyyy")</td>
+                                        <td class="action-buttons mt-2">
+                                            <div class="btn-container">
+                                                <div class="container">
+                                                    <a asp-controller="File" asp-action="Details" asp-route-id="@file.Id" class="btn btn-sm btn-info">Detay</a>
+                                                    <a asp-controller="File" asp-action="Download" asp-route-id="@file.Id" class="btn btn-sm btn-success">İndir</a>
+                                                    <form asp-controller="MyPage" asp-action="ToggleVisibility" asp-route-id="@file.Id" method="post" style="display:inline;">
+                                                        <button type="submit" class="btn btn-sm btn-warning">
+                                                            @((file.Visibility == Visibility.Public) ? "Gizle" : "Yayına Al")
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                                <div class="container mt-2">
+                                                    <form asp-controller="MyPage" asp-action="Delete" asp-route-id="@file.Id" method="post" style="display:inline;">
+                                                        <button type="submit" class="btn btn-sm btn-danger"
+                                                                onclick="return confirm('Silmek istediğinize emin misiniz?')">
+                                                            Sil
+                                                        </button>
+                                                    </form>
+                                                    <a asp-controller="MyPage" asp-action="Update" asp-route-id="@file.Id" class="btn btn-sm btn-primary">Güncelle</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    .action-buttons {
+        width: 350px;
+    }
+
+    .btn-container .btn {
+        flex: 1 1 48%;
+        min-width: 120px;
+    }
+
+        .btn-container .btn {
+            flex: 1 1 48%;
+            min-width: 90px;
+        }
+
+    .color {
+        color: whitesmoke
+    }
+
+    .btn {
+        color: black !important;
+    }
+</style>

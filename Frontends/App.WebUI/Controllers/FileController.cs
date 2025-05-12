@@ -58,7 +58,7 @@ namespace App.WebUI.Controllers
             dto.FilePath = filePath;
             dto.OwnerId = int.Parse(userId);
             dto.UploadDate = DateTime.UtcNow;
-            dto.Visibility = (Dto.FileDtos.Visibility)viewModel.Visibility;
+            dto.Visibility = (Dto.Enums.FileVisibility)viewModel.Visibility;
             var metaResponse = await client.PostAsJsonAsync("/api/files/create", dto);
             if (!metaResponse.IsSuccessStatusCode)
             {
@@ -123,6 +123,6 @@ namespace App.WebUI.Controllers
             var fileBytes = await fileResponse.Content.ReadAsByteArrayAsync();
             var contentType = fileResponse.Content.Headers.ContentType?.MediaType ?? "application/octet-stream";
             return File(fileBytes, contentType, fileName);
-        }
+        }        
     }
 }
