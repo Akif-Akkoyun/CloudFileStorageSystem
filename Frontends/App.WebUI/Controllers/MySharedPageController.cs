@@ -8,6 +8,7 @@ using System.Security.Claims;
 using AutoMapper;
 using App.Dto.FileDtos;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Net;
 
 namespace App.WebUI.Controllers
 {
@@ -172,6 +173,32 @@ namespace App.WebUI.Controllers
                 }
             }
             return View(viewModelList);
+        }
+        [HttpGet]
+        public async Task<IActionResult> MyPageDetailsPartial(int id)
+        {
+            var client = _httpClientFactory.CreateClient("GatewayAPI");
+            var token = Request.Cookies["auth-token"];
+
+            if (!string.IsNullOrWhiteSpace(token))
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
+
+            var response = await client.GetAsync($"/api/files/get-by/{id}");
+            if (!response.IsSuccessStatusCode || response.Content.Headers.ContentLength == 0)
+            {
+                return Content("<div class='text-danger p-3'>Dosya getirilemedi.</div>", "text/html");
+            }
+
+            var dto = await response.Content.ReadFromJsonAsync<FileDetailDto>();
+            if (dto == null)
+            {
+                return Content("<div class='text-danger p-3'>Dosya bulunamadı.</div>", "text/html");
+            }
+
+            var viewModel = _mapper.Map<FileDetailViewModel>(dto);
+            return PartialView("_FileDetailModalPartial", viewModel);
         }
     }
 }
