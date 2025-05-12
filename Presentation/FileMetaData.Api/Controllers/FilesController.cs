@@ -100,5 +100,15 @@ namespace FileMetaData.Api.Controllers
             var result = await _mediator.Send(new GetFileSharesByFileIdQuery(fileId));
             return Ok(result);
         }
+        [HttpGet("shared-by-me/{userId}")]
+        public async Task<IActionResult> GetFilesSharedByMe(int userId)
+        {
+            var result = await _mediator.Send(new GetFilesSharedByMeQuery(userId));
+
+            if (result.Status == ResultStatus.NotFound)
+                return NotFound(result.Errors);
+
+            return Ok(result.Value);
+        }
     }
 }

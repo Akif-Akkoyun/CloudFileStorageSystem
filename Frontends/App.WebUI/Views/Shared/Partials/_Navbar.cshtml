@@ -9,10 +9,12 @@
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav nav mr-auto">
                     <li class="nav-item">
-                        <a asp-action="Index" asp-controller="Home" class="nav-link"><span>Home</span></a>
+                        <a asp-action="Index" asp-controller="Home" class="nav-link"><span>Ana Sayfa</span></a>
                         @if (User.Identity.IsAuthenticated)
                         {
-                        <li class="nav-item"><a asp-action="MyFiles" asp-controller="MyPage" class="nav-link"><span>My Files</span></a></li>
+                        <li class="nav-item"><a asp-action="MyFiles" asp-controller="MyPage" class="nav-link"><span>Dosyalarım</span></a></li>
+                        <li class="nav-item"><a asp-action="SharedWithMe" asp-controller="MySharedPage" class="nav-link"><span>Benimle Paylaşılan</span></a></li>
+                        <li class="nav-item"><a asp-action="SharedByMe" asp-controller="MySharedPage" class="nav-link"><span>Benim Paylaştığım</span></a></li>
                         }                        
                     </li>
                 </ul>

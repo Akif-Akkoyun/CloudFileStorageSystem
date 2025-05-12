@@ -1,4 +1,5 @@
 ﻿@model ShareFileViewModel
+
 @{
     ViewData["Title"] = "Dosya Paylaş";
 }
@@ -10,7 +11,7 @@
                 <div class="card shadow">
                     <div class="card-body">
                         <h4 class="card-title text-center mb-4">Dosyayı Paylaş</h4>
-                        <form asp-action="Share" asp-controller="MyPage" method="post">
+                        <form asp-action="ShareFile" asp-controller="MySharedPage" method="post">
                             <input type="hidden" asp-for="Id" />
                             <div class="mb-3">
                                 <label asp-for="SelectedUserIds" class="form-label">Kullanıcı Seç</label>
