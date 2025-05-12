@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FluentValidation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -14,5 +15,16 @@ namespace App.Dto.AuthDtos
         public string Email { get; set; } = default!;
         public string PasswordHash { get; set; } = default!;
         public int RoleId { get; set; }
+    }
+    public class RegisterDtoValidator : AbstractValidator<RegisterDto>
+    {
+        public RegisterDtoValidator()
+        {
+            RuleFor(x => x.UserName).NotEmpty().WithMessage("UserName is required.");
+            RuleFor(x => x.UserSurName).NotEmpty().WithMessage("UserSurName is required.");
+            RuleFor(x => x.Email).NotEmpty().EmailAddress().WithMessage("Valid Email is required.");
+            RuleFor(x => x.PasswordHash).NotEmpty().WithMessage("Password is required.");
+            RuleFor(x => x.RoleId).GreaterThan(0).WithMessage("RoleId must be greater than 0.");
+        }
     }
 }
