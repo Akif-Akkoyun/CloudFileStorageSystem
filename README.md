@@ -1,11 +1,6 @@
 # CloudFileStorageSystem
 ✅ About This Project – Cloud File Management System
 This project is a multi-layered cloud file management system built with a microservices architecture, designed to provide secure file upload, storage, metadata management, and user-based access control. It includes advanced logging, authentication, and role-based authorization features. The system supports both public and private file visibility, user-to-user file sharing, and centralized logging using Serilog.
-ChatGPT:
-Evet, tüm süreci hatırlıyorum. Projen çok katmanlı, mikroservis mimarisiyle inşa edilmiş bir dosya yönetim sistemi. Hem teknik olarak güçlü hem de kullanıcı odaklı özellikler içeriyor. Aşağıda sana uygun, detaylı ve profesyonel bir About This Project yazısı hazırladım:
-
-✅ About This Project – Cloud File Management System
-This project is a multi-layered cloud file management system built with a microservices architecture, designed to provide secure file upload, storage, metadata management, and user-based access control. It includes advanced logging, authentication, and role-based authorization features. The system supports both public and private file visibility, user-to-user file sharing, and centralized logging using Serilog.
 
 🔧 Technologies & Tools Used
 `.NET 8` – Entire backend infrastructure built using ASP.NET Core with latest LTS version
