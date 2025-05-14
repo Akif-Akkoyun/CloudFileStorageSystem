@@ -41,7 +41,6 @@ namespace App.WebUI.Controllers
                 ViewBag.Error = "Giriş yapılamadı, lütfen tekrar deneyin.";
                 return View(model);
             }
-
             Response.Cookies.Append("auth-token", tokenDto.Token);
             return RedirectToAction("Index", "Home");
         }

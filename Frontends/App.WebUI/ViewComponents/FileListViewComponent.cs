@@ -31,7 +31,7 @@ namespace App.WebUI.ViewComponents
 
             var orderList = fileList
                 .OrderByDescending(x => x.Id)
-                .Take(6)
+                .Take(9)
                 .ToList();
             return View(orderList);
         }
