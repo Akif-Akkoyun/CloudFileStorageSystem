@@ -1,4 +1,14 @@
-﻿<header>
+﻿<style>
+    .nav-link.active {
+        color: #fbbf24 !important;
+    }
+    .nav-link {
+        color: white;
+        transition: all 0.3s ease;
+    }
+</style>
+
+<header>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar ftco-navbar-light site-navbar-target" id="ftco-navbar">
         <div class="container">
             <a class="navbar-brand" asp-action="Index" asp-controller="Home">Cloud</a>
@@ -9,29 +19,55 @@
             <div class="collapse navbar-collapse" id="ftco-nav">
                 <ul class="navbar-nav nav mr-auto">
                     <li class="nav-item">
-                        <a asp-action="Index" asp-controller="Home" class="nav-link"><span>Ana Sayfa</span></a>
+                        <a asp-action="Index" asp-controller="Home" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Index" ? "active" : "")"><span>Ana Sayfa</span></a>
                     </li>
                     <li class="nav-item">
-                        <a asp-action="Upload" asp-controller="File" class="nav-link"><span>Dosya Yükle</span></a>
+                        <a asp-action="Upload" asp-controller="File" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Upload" ? "active" : "")"><span>Dosya Yükle</span></a>
                     </li>
                     @if (User?.Identity != null && User.Identity.IsAuthenticated)
                     {
-                        <li class="nav-item"><a asp-action="MyFiles" asp-controller="MyPage" class="nav-link"><span>Dosyalarım</span></a></li>
-                        <li class="nav-item"><a asp-action="SharedWithMe" asp-controller="MySharedPage" class="nav-link"><span>Benimle Paylaşılan</span></a></li>
-                        <li class="nav-item"><a asp-action="SharedByMe" asp-controller="MySharedPage" class="nav-link"><span>Benim Paylaştığım</span></a></li>
+                        <li class="nav-item "><a asp-action="MyFiles" asp-controller="MyPage" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "MyFiles" ? "active" : "")"><span>Dosyalarım</span></a></li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="/MySharedPage/SharedWithMe">Benimle Paylaşılan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/MySharedPage/SharedByMe">Benim Paylaştığım</a>
+                        </li>
+
                     }
                 </ul>
                 <ul class="navbar-nav nav ml-auto">
                     @if (User?.Identity != null && User.Identity.IsAuthenticated)
                     {
-                        <li class="nav-item"><a asp-action="Logout" asp-controller="Auth" class="nav-link"><span>Logout</span></a></li>
+                        <li class="nav-item"><a asp-action="Logout" asp-controller="Auth" class="nav-link "><span>Çıkış Yap</span></a></li>
                     }
                     else
                     {
-                        <li class="nav-item"><a asp-action="Login" asp-controller="Auth" class="nav-link"><span>Login/Register</span></a></li>
+                        <li class="nav-item"><a asp-action="Login" asp-controller="Auth" class="nav-link @(ViewContext.RouteData.Values["action"]?.ToString() == "Login" ? "active" : "")"><span>Giriş Yap/Kayıt Ol</span></a></li>
                     }
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+<script>
+    window.addEventListener("load", function () {
+        setTimeout(() => {
+            const currentPath = window.location.pathname.toLowerCase();
+            const navLinks = document.querySelectorAll(".nav-link");
+
+            navLinks.forEach(link => {
+                const href = link.getAttribute("href")?.toLowerCase();
+                if (!href) return;
+                if (currentPath === href) {
+                    link.classList.add("active");
+                } else {
+                    link.classList.remove("active");
+                }
+            });
+        }, 200);
+    });
+</script>
+
+
